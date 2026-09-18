@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}Event Registration | GITAM Campus Life{% endblock %}
+
+{% block content %}
+
+<style>
+    .register-page {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 30px 15px 60px;
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .register-header h1 {
+        color: #087f3e;
+        margin-bottom: 8px;
+        font-size: 30px;
+    }
+
+    .register-header p {
+        color: #666;
+    }
+
+    .register-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 30px;
+        border: 1px solid #dcefe3;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .event-box {
+        background: #f1f9f4;
+        border-left: 5px solid #087f3e;
+        padding: 18px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+
+    .event-box h2 {
+        margin: 0 0 8px;
+        color: #087f3e;
+        font-size: 23px;
+    }
+
+    .event-info {
+        color: #555;
+        line-height: 1.7;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #cfe4d6;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+        background: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #087f3e;
+        box-shadow: 0 0 0 3px rgba(8,127,62,0.10);
+    }
+
+    textarea.form-control {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .required {
+        color: #d32f2f;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .btn-register {
+        border: none;
+        background: #087f3e;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .btn-register:hover {
+        background: #056b34;
+    }
+
+    .btn-back {
+        text-decoration: none;
+        background: #eef5f0;
+        color: #087f3e;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 700;
+    }
+
+    .btn-back:hover {
+        background: #dcefe3;
+    }
+
+    .notice-box {
+        margin-top: 22px;
+        background: #fff8e1;
+        border: 1px solid #f0df9a;
+        padding: 15px;
+        border-radius: 9px;
+        color: #665500;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .page-footer {
+        text-align: center;
+        margin-top: 30px;
+        padding: 15px;
+        color: #087f3e;
+        font-weight: 800;
+        font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+        .register-card {
+            padding: 20px;
+        }
+
+        .register-header h1 {
+            font-size: 25px;
+        }
+
+        .button-row {
+            flex-direction: column;
+        }
+
+        .btn-register,
+        .btn-back {
+            text-align: center;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="register-page">
+
+    <div class="register-header">
+        <h1>📝 Event Registration</h1>
+        <p>Register for a GITAM Campus Life event</p>
+    </div>
+
+    <div class="register-card">
+
+        {% if event %}
+
+            <div class="event-box">
+
+                <h2>
+                    {{ event["title"]|default("Campus Event", true) }}
+                </h2>
+
+                <div class="event-info">
+
+                    {% if event["event_date"]|default("", true) %}
+                        <strong>📅 Date:</strong>
+                        {{ event["event_date"] }}
+                        <br>
+                    {% endif %}
+
+                    {% if event["event_time"]|default("", true) %}
+                        <strong>⏰ Time:</strong>
+                        {{ event["event_time"] }}
+                        <br>
+                    {% endif %}
+
+                    {% if event["location"]|default("", true) %}
+                        <strong>📍 Location:</strong>
+                        {{ event["location"] }}
+                        <br>
+                    {% endif %}
+
+                    {% if event["description"]|default("", true) %}
+                        <br>
+                        <strong>Description:</strong>
+                        <br>
+                        {{ event["description"] }}
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <form
+                method="POST"
+                action="{{ url_for('events.event_register', event_id=event['id']) }}"
+            >
+
+                <div class="form-group">
+                    <label for="name">
+                        Name <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-control"
+                        value="{{ user['name']|default('', true) if user else '' }}"
+                        placeholder="Enter your name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        Email <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ user['email']|default('', true) if user else '' }}"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        Phone
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        class="form-control"
+                        value="{{ user['phone']|default('', true) if user else '' }}"
+                        placeholder="Enter your phone number"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="roll_no">
+                        Roll Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="roll_no"
+                        name="roll_no"
+                        class="form-control"
+                        value="{{ user['roll_no']|default('', true) if user else '' }}"
+                        placeholder="Enter roll number"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="message">
+                        Additional Information
+                    </label>
+
+                    <textarea
+                        id="message"
+                        name="message"
+                        class="form-control"
+                        placeholder="Any additional information..."
+                    ></textarea>
+                </div>
+
+                <div class="notice-box">
+                    <strong>ℹ️ Registration Notice</strong><br>
+                    Please verify your information before submitting your
+                    event registration.
+                </div>
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        class="btn-register"
+                    >
+                        ✓ Register for Event
+                    </button>
+
+                    <a
+                        href="{{ url_for('events.event_details', event_id=event['id']) }}"
+                        class="btn-back"
+                    >
+                        ← Back to Event
+                    </a>
+
+                </div>
+
+            </form>
+
+        {% else %}
+
+            <div style="text-align:center; padding:30px;">
+
+                <h2 style="color:#087f3e;">
+                    Event Not Found
+                </h2>
+
+                <p style="color:#666;">
+                    The requested event could not be found.
+                </p>
+
+                <br>
+
+                <a
+                    href="{{ url_for('events.events_page') }}"
+                    class="btn-back"
+                >
+                    ← Back to Events
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <div class="page-footer">
+        MADE BY TEAM INNOVATORS HUB
+    </div>
+
+</div>
+
+{% endblock %}
