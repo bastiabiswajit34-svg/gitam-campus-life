@@ -1,0 +1,765 @@
+{% extends "base.html" %}
+
+{% block title %}Visitor Pass Status | GITAM Campus Life{% endblock %}
+
+{% block content %}
+
+<style>
+    .status-page {
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 30px 15px 60px;
+    }
+
+    .status-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .status-header h1 {
+        color: #087f3e;
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0 0 8px;
+    }
+
+    .status-header p {
+        color: #666;
+        margin: 0;
+    }
+
+    .status-card {
+        background: #ffffff;
+        border: 1px solid #d8eee0;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+    }
+
+    .search-title {
+        color: #087f3e;
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 220px;
+        padding: 13px 15px;
+        border: 1px solid #cfe4d6;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .search-input:focus {
+        border-color: #087f3e;
+        box-shadow: 0 0 0 3px rgba(8, 127, 62, 0.10);
+    }
+
+    .search-btn {
+        border: none;
+        background: #087f3e;
+        color: white;
+        padding: 13px 24px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .search-btn:hover {
+        background: #056b34;
+    }
+
+    .empty-box {
+        text-align: center;
+        background: #f1f9f4;
+        border: 1px solid #d8eee0;
+        border-radius: 12px;
+        padding: 25px;
+        color: #555;
+    }
+
+    .empty-box .icon {
+        font-size: 42px;
+        margin-bottom: 10px;
+    }
+
+    .result-card {
+        background: #ffffff;
+        border: 1px solid #d8eee0;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .result-title {
+        text-align: center;
+        color: #087f3e;
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .status-badge {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 9px 22px;
+        border-radius: 30px;
+        font-weight: 800;
+        font-size: 14px;
+    }
+
+    .badge-pending {
+        background: #fff4cc;
+        color: #806600;
+    }
+
+    .badge-approved {
+        background: #dff5e6;
+        color: #087f3e;
+    }
+
+    .badge-rejected {
+        background: #ffe1e1;
+        color: #b42318;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .detail-box {
+        background: #f8fcf9;
+        border: 1px solid #e0eee4;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .detail-box.full {
+        grid-column: 1 / -1;
+    }
+
+    .detail-label {
+        display: block;
+        color: #777;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        color: #222;
+        font-size: 15px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .pass-code {
+        background: #eef8f1;
+        border: 1px dashed #087f3e;
+        color: #087f3e;
+        text-align: center;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+
+    .pass-code-label {
+        display: block;
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+
+    .pass-code-value {
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 1px;
+    }
+
+    .message-box {
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        line-height: 1.6;
+    }
+
+    .message-pending {
+        background: #fff8e1;
+        border: 1px solid #f0df9a;
+        color: #665500;
+    }
+
+    .message-approved {
+        background: #e8f7ed;
+        border: 1px solid #b9e3c7;
+        color: #087f3e;
+    }
+
+    .message-rejected {
+        background: #fff0f0;
+        border: 1px solid #f2c2c2;
+        color: #a51d1d;
+    }
+
+    .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        display: inline-block;
+        text-decoration: none;
+        padding: 12px 22px;
+        border-radius: 8px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .apply-btn {
+        background: #087f3e;
+        color: white;
+    }
+
+    .apply-btn:hover {
+        background: #056b34;
+    }
+
+    .verify-btn {
+        background: #eef7f1;
+        color: #087f3e;
+        border: 1px solid #cfe4d6;
+    }
+
+    .verify-btn:hover {
+        background: #dcefe3;
+    }
+
+    .approved-pass-btn {
+        background: #087f3e;
+        color: white;
+    }
+
+    .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding: 15px;
+        color: #087f3e;
+        font-weight: 800;
+        font-size: 14px;
+    }
+
+    @media (max-width: 650px) {
+
+        .status-card,
+        .result-card {
+            padding: 20px;
+        }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-box.full {
+            grid-column: auto;
+        }
+
+        .search-form {
+            flex-direction: column;
+        }
+
+        .search-input,
+        .search-btn {
+            width: 100%;
+        }
+
+        .action-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="status-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="status-header">
+
+        <h1>🔎 Visitor Pass Status</h1>
+
+        <p>
+            Check your GITAM Campus visitor pass application
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH CARD
+    ====================================================== -->
+
+    <div class="status-card">
+
+        <div class="search-title">
+            Enter Visitor Pass Code
+        </div>
+
+        <form
+            method="GET"
+            action="{{ url_for('visitor.visitor_status') }}"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="code"
+                class="search-input"
+                placeholder="Example: VST-20260917-ABC12345"
+                value="{{ search_code|default('', true) }}"
+                autocomplete="off"
+            >
+
+            <button
+                type="submit"
+                class="search-btn"
+            >
+                🔍 Check Status
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         NO RESULT
+    ====================================================== -->
+
+    {% if not visitor %}
+
+        <div class="empty-box">
+
+            <div class="icon">
+                🎫
+            </div>
+
+            {% if search_code %}
+
+                <strong>
+                    Visitor Pass Not Found
+                </strong>
+
+                <p>
+                    We could not find a visitor pass with
+                    the entered pass code.
+                </p>
+
+                <p>
+                    Please check the code and try again.
+                </p>
+
+            {% else %}
+
+                <strong>
+                    Check Your Visitor Pass
+                </strong>
+
+                <p>
+                    Enter your visitor pass code above
+                    to view the application status.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    {% else %}
+
+
+        <!-- =================================================
+             RESULT CARD
+        ================================================== -->
+
+        <div class="result-card">
+
+            <div class="result-title">
+                🎫 Visitor Pass Details
+            </div>
+
+
+            <!-- =============================================
+                 STATUS
+            ============================================== -->
+
+            <div class="status-badge">
+
+                {% set current_status =
+                    visitor["status"]|default("Pending", true)
+                %}
+
+                {% if current_status == "Approved" %}
+
+                    <span class="badge badge-approved">
+                        ✅ APPROVED
+                    </span>
+
+                {% elif current_status == "Rejected" %}
+
+                    <span class="badge badge-rejected">
+                        ❌ REJECTED
+                    </span>
+
+                {% else %}
+
+                    <span class="badge badge-pending">
+                        ⏳ PENDING
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =============================================
+                 PASS CODE
+            ============================================== -->
+
+            {% if visitor["qr_code"] %}
+
+                <div class="pass-code">
+
+                    <span class="pass-code-label">
+                        Visitor Pass Code
+                    </span>
+
+                    <div class="pass-code-value">
+                        {{ visitor["qr_code"] }}
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =============================================
+                 DETAILS
+            ============================================== -->
+
+            <div class="details-grid">
+
+
+                <!-- Visitor Name -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Visitor Name
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["visitor_name"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Phone Number
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["visitor_phone"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Email
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["visitor_email"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Relationship -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Relationship
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["relationship"]|default("Visitor", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Person to Meet -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Visiting Student
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["person_to_meet"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Visit Date -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Visit Date
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["visit_date"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Arrival Time -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Visit Time
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["arrival_time"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Visitor Count -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Visitor Count
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["visitor_count"]|default(1, true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Purpose -->
+
+                <div class="detail-box full">
+
+                    <span class="detail-label">
+                        Purpose of Visit
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["purpose"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- ID Proof -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        ID Proof Type
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["id_proof_type"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- ID Proof Number -->
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        ID Proof Number
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["id_proof_number"]|default("Not provided", true) }}
+                    </span>
+
+                </div>
+
+
+                <!-- Created -->
+
+                <div class="detail-box full">
+
+                    <span class="detail-label">
+                        Application Submitted
+                    </span>
+
+                    <span class="detail-value">
+                        {{ visitor["created_at"]|default("Not available", true) }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 STATUS MESSAGE
+            ============================================== -->
+
+            {% if current_status == "Approved" %}
+
+                <div class="message-box message-approved">
+
+                    <strong>
+                        ✅ Visitor Pass Approved
+                    </strong>
+
+                    <br>
+
+                    Your visitor pass has been approved by
+                    the administrator.
+
+                    {% if visitor["id"] %}
+
+                        You can open the approved pass below.
+
+                    {% endif %}
+
+                </div>
+
+            {% elif current_status == "Rejected" %}
+
+                <div class="message-box message-rejected">
+
+                    <strong>
+                        ❌ Visitor Pass Rejected
+                    </strong>
+
+                    <br>
+
+                    Your visitor pass application has been
+                    rejected by the administrator.
+
+                </div>
+
+            {% else %}
+
+                <div class="message-box message-pending">
+
+                    <strong>
+                        ⏳ Visitor Pass Pending
+                    </strong>
+
+                    <br>
+
+                    Your visitor pass application has been
+                    submitted successfully and is waiting
+                    for administrator approval.
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =============================================
+                 BUTTONS
+            ============================================== -->
+
+            <div class="button-row">
+
+                <a
+                    href="{{ url_for('visitor.visitor_apply') }}"
+                    class="action-btn apply-btn"
+                >
+                    🎫 New Visitor Pass
+                </a>
+
+
+                <a
+                    href="{{ url_for('visitor.visitor_verify') }}"
+                    class="action-btn verify-btn"
+                >
+                    🔐 Verify Pass
+                </a>
+
+
+                {% if current_status == "Approved" and visitor["id"] %}
+
+                    <a
+                        href="{{ url_for('visitor.visitor_pass', visitor_id=visitor['id']) }}"
+                        class="action-btn approved-pass-btn"
+                    >
+                        🎟️ Open Approved Pass
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="footer">
+        MADE BY TEAM INNOVATORS HUB
+    </div>
+
+</div>
+
+{% endblock %}
