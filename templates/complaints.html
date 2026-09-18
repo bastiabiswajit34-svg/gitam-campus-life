@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Complaints - GITAM Campus Life</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f9f6;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        header {
+            background: #0f8f4f;
+            color: white;
+            padding: 18px 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.7);
+            padding: 9px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* =====================================================
+           MAIN
+           ===================================================== */
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 18px 100px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            color: #08783f;
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: #667085;
+            margin-bottom: 25px;
+        }
+
+        /* =====================================================
+           FLASH MESSAGES
+           ===================================================== */
+
+        .flash {
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+
+        .flash.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .flash.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .flash.warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .flash.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        /* =====================================================
+           SUBMIT COMPLAINT
+           ===================================================== */
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 25px;
+
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            border: 1px solid #e5e7eb;
+        }
+
+        .card-title {
+            color: #08783f;
+            font-size: 21px;
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 13px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-size: 15px;
+            font-family: inherit;
+
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #0f8f4f;
+            box-shadow: 0 0 0 3px rgba(15,143,79,0.10);
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #0f8f4f;
+            color: white;
+
+            border: none;
+            border-radius: 8px;
+
+            padding: 12px 22px;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #08783f;
+        }
+
+        /* =====================================================
+           COMPLAINT LIST
+           ===================================================== */
+
+        .complaint-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 13px;
+
+            padding: 20px;
+            margin-bottom: 17px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 15px;
+            margin-bottom: 14px;
+        }
+
+        .complaint-title {
+            font-size: 19px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .complaint-id {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 999px;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-progress {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-default {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        /* =====================================================
+           DETAILS
+           ===================================================== */
+
+        .detail-row {
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .category {
+            display: inline-block;
+            background: #ecfdf3;
+            color: #08783f;
+
+            padding: 5px 9px;
+            border-radius: 6px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* =====================================================
+           ADMIN SECTION
+           ===================================================== */
+
+        .admin-box {
+            margin-top: 18px;
+
+            padding: 17px;
+
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+
+            border-radius: 10px;
+        }
+
+        .admin-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .admin-user {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 11px;
+            border-radius: 7px;
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           ADMIN ACTION BUTTONS
+           ===================================================== */
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+
+            margin-top: 14px;
+        }
+
+        .action-btn {
+            display: inline-block;
+
+            text-decoration: none;
+
+            border: none;
+            border-radius: 7px;
+
+            padding: 9px 14px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .resolve-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .resolve-btn:hover {
+            background: #15803d;
+        }
+
+        .reject-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .reject-btn:hover {
+            background: #b91c1c;
+        }
+
+        .progress-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .progress-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .pending-btn {
+            background: #d97706;
+            color: white;
+        }
+
+        .pending-btn:hover {
+            background: #b45309;
+        }
+
+        /* =====================================================
+           RESPONSE
+           ===================================================== */
+
+        .response-box {
+            margin-top: 15px;
+
+            padding: 13px 15px;
+
+            background: #ecfdf3;
+            border-left: 4px solid #0f8f4f;
+
+            border-radius: 6px;
+        }
+
+        .response-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #08783f;
+            margin-bottom: 5px;
+        }
+
+        /* =====================================================
+           EMPTY
+           ===================================================== */
+
+        .empty {
+            background: white;
+            border: 1px dashed #cbd5e1;
+
+            padding: 35px 20px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            color: #64748b;
+        }
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        footer {
+            text-align: center;
+
+            padding: 22px 15px;
+
+            background: white;
+
+            border-top: 1px solid #e5e7eb;
+
+            color: #08783f;
+
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-title {
+                font-size: 25px;
+            }
+
+            .complaint-header {
+                flex-direction: column;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header>
+
+    <div class="header-inner">
+
+        <div>
+
+            <div class="brand">
+                GITAM Campus Life
+            </div>
+
+            <div class="subtitle">
+                Complaint Management
+            </div>
+
+        </div>
+
+        <a href="{{ url_for('auth.login') }}"
+           class="back-btn">
+            Back
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main>
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <h1 class="page-title">
+        Complaints
+    </h1>
+
+    <p class="page-description">
+        Submit and track campus complaints.
+    </p>
+
+
+    <!-- =====================================================
+         STUDENT / FACULTY SUBMISSION
+         ===================================================== -->
+
+    {% if not is_admin %}
+
+    <div class="card">
+
+        <div class="card-title">
+            Submit a Complaint
+        </div>
+
+        <form method="POST"
+              action="{{ url_for('complaints.complaints_page') }}">
+
+            <!-- CATEGORY -->
+
+            <div class="form-group">
+
+                <label for="category">
+                    Category
+                </label>
+
+                <select
+                    id="category"
+                    name="category">
+
+                    <option value="General">
+                        General
+                    </option>
+
+                    <option value="Academic">
+                        Academic
+                    </option>
+
+                    <option value="Hostel">
+                        Hostel
+                    </option>
+
+                    <option value="Library">
+                        Library
+                    </option>
+
+                    <option value="Transport">
+                        Transport
+                    </option>
+
+                    <option value="Infrastructure">
+                        Infrastructure
+                    </option>
+
+                    <option value="IT / Technical">
+                        IT / Technical
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SUBJECT -->
+
+            <div class="form-group">
+
+                <label for="subject">
+                    Subject
+                </label>
+
+                <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    placeholder="Enter complaint subject"
+                    required>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Describe your complaint..."
+                    required></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-btn">
+
+                Submit Complaint
+
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         COMPLAINT LIST
+         ===================================================== -->
+
+    <div class="card">
+
+        <div class="card-title">
+
+            {% if is_admin %}
+                All Complaints
+            {% else %}
+                My Complaints
+            {% endif %}
+
+        </div>
+
+
+        {% if complaints %}
+
+            {% for complaint in complaints %}
+
+            <div class="complaint-card">
+
+                <!-- HEADER -->
+
+                <div class="complaint-header">
+
+                    <div>
+
+                        <div class="complaint-title">
+
+                            {{ complaint["subject"] }}
+
+                        </div>
+
+                        <div class="complaint-id">
+
+                            Complaint ID:
+                            #{{ complaint["id"] }}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    {% set current_status =
+                        (complaint["status"] or "Pending")
+                        |lower
+                    %}
+
+                    {% if current_status == "pending" %}
+
+                        <span class="status status-pending">
+                            Pending
+                        </span>
+
+                    {% elif current_status in
+                          ["in progress", "in-progress"] %}
+
+                        <span class="status status-progress">
+                            In Progress
+                        </span>
+
+                    {% elif current_status == "resolved" %}
+
+                        <span class="status status-resolved">
+                            Resolved
+                        </span>
+
+                    {% elif current_status == "rejected" %}
+
+                        <span class="status status-rejected">
+                            Rejected
+                        </span>
+
+                    {% else %}
+
+                        <span class="status status-default">
+                            {{ complaint["status"] }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                {% if complaint["category"] %}
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Category
+                    </div>
+
+                    <div>
+                        <span class="category">
+                            {{ complaint["category"] }}
+                        </span>
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Description
+                    </div>
+
+                    <div class="detail-value">
+                        {{ complaint["description"] }}
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ADMIN INFORMATION
+                     ================================================= -->
+
+                {% if is_admin %}
+
+                <div class="admin-box">
+
+                    <div class="admin-title">
+                        Complaint Information
+                    </div>
+
+
+                    {% if complaint["user_name"] %}
+
+                    <div class="admin-user">
+
+                        <strong>
+                            User:
+                        </strong>
+
+                        {{ complaint["user_name"] }}
+
+                        {% if complaint["username"] %}
+                            ({{ complaint["username"] }})
+                        {% endif %}
+
+                        <br>
+
+                        {% if complaint["role"] %}
+
+                        <strong>
+                            Role:
+                        </strong>
+
+                        {{ complaint["role"] }}
+
+                        {% endif %}
+
+
+                        {% if complaint["roll_no"] %}
+
+                        <br>
+
+                        <strong>
+                            Roll No:
+                        </strong>
+
+                        {{ complaint["roll_no"] }}
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         ADMIN RESPONSE
+                         ================================================= -->
+
+                    <form method="POST"
+                          action="{{ url_for(
+                              'complaints.admin_action',
+                              complaint_id=complaint['id'],
+                              action='resolve'
+                          ) }}">
+
+                        <label for="response-{{ complaint['id'] }}">
+                            Admin Response
+                        </label>
+
+                        <textarea
+                            id="response-{{ complaint['id'] }}"
+                            name="response"
+                            placeholder="Optional response to the student/faculty..."
+                            style="min-height:90px;"></textarea>
+
+
+                        <!-- =================================================
+                             ACTION BUTTONS
+                             ================================================= -->
+
+                        <div class="actions">
+
+                            <!-- RESOLVE -->
+
+                            <button
+                                type="submit"
+                                class="action-btn resolve-btn"
+                                onclick="return confirm(
+                                    'Mark this complaint as Resolved?'
+                                );">
+
+                                ✓ Resolve
+
+                            </button>
+
+
+                            <!-- REJECT -->
+
+                            <button
+                                type="submit"
+                                formaction="{{ url_for(
+                                    'complaints.admin_action',
+                                    complaint_id=complaint['id'],
+                                    action='reject'
+                                ) }}"
+                                class="action-btn reject-btn"
+                                onclick="return confirm(
+                                    'Reject this complaint?'
+                                );">
+
+                                ✕ Reject
+
+                            </button>
+
+
+                            <!-- IN PROGRESS -->
+
+                            <button
+                                type="submit"
+                                formaction="{{ url_for(
+                                    'complaints.admin_action',
+                                    complaint_id=complaint['id'],
+                                    action='in-progress'
+                                ) }}"
+                                class="action-btn progress-btn">
+
+                                ↻ In Progress
+
+                            </button>
+
+
+                            <!-- PENDING -->
+
+                            <button
+                                type="submit"
+                                formaction="{{ url_for(
+                                    'complaints.admin_action',
+                                    complaint_id=complaint['id'],
+                                    action='pending'
+                                ) }}"
+                                class="action-btn pending-btn">
+
+                                ⏳ Pending
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     RESPONSE SHOWN TO USER
+                     ================================================= -->
+
+                {% if complaint["response"] %}
+
+                <div class="response-box">
+
+                    <div class="response-title">
+                        Admin Response
+                    </div>
+
+                    <div>
+                        {{ complaint["response"] }}
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="empty">
+
+                {% if is_admin %}
+
+                    No complaints have been submitted yet.
+
+                {% else %}
+
+                    You have not submitted any complaints yet.
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+<script>
+
+    // =========================================================
+    // AUTO HIDE FLASH MESSAGES
+    // =========================================================
+
+    setTimeout(function () {
+
+        const messages =
+            document.querySelectorAll(".flash");
+
+        messages.forEach(function (message) {
+
+            message.style.transition =
+                "opacity 0.5s ease";
+
+            message.style.opacity = "0";
+
+        });
+
+    }, 5000);
+
+
+    // =========================================================
+    // PREVENT DOUBLE SUBMISSION
+    // =========================================================
+
+    document.querySelectorAll("form").forEach(
+        function(form) {
+
+            form.addEventListener(
+                "submit",
+                function(event) {
+
+                    const clicked =
+                        document.activeElement;
+
+                    if (
+                        clicked &&
+                        clicked.tagName === "BUTTON"
+                    ) {
+
+                        setTimeout(
+                            function() {
+
+                                clicked.disabled =
+                                    true;
+
+                            },
+                            50
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
