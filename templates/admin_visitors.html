@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Visitor Management - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .header {
+            background: #087f3f;
+            color: white;
+            padding: 22px 15px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            color: #087f3f;
+        }
+
+        .back {
+            display: inline-block;
+            padding: 10px 15px;
+            background: white;
+            color: #087f3f;
+            border: 2px solid #087f3f;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            background: #e5f8ed;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, .06);
+            border-top: 4px solid #087f3f;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #087f3f;
+        }
+
+        .stat-label {
+            margin-top: 5px;
+            font-size: 13px;
+            color: #607568;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .07);
+            overflow-x: auto;
+        }
+
+        .table-card h2 {
+            margin-top: 0;
+            color: #087f3f;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #c9ddd0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #087f3f;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        th {
+            background: #087f3f;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5eee8;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #f5fbf7;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff4cc;
+            color: #856404;
+        }
+
+        .approved {
+            background: #e3f7e9;
+            color: #087f3f;
+        }
+
+        .rejected {
+            background: #ffe5e2;
+            color: #b42318;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .action-form {
+            display: inline;
+            margin: 0;
+        }
+
+        .action-button {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .approve {
+            background: #087f3f;
+            color: white;
+        }
+
+        .approve:hover {
+            background: #066b35;
+        }
+
+        .reject {
+            background: #d92d20;
+            color: white;
+        }
+
+        .reject:hover {
+            background: #b42318;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #607568;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        @media (max-width: 800px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px 10px 90px;
+            }
+
+            .table-card {
+                padding: 12px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <h1>
+        👥 Visitor Management
+    </h1>
+
+    <p>
+        GITAM Campus Life — Administrator Panel
+    </p>
+
+</header>
+
+
+<main class="container">
+
+
+    <div class="top-bar">
+
+        <h2>
+            Visitor Pass Applications
+        </h2>
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="back"
+        >
+            ← Admin Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ==================================================
+         STATISTICS
+         ================================================== -->
+
+    <div class="stats">
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+                {{ visitors|length }}
+            </div>
+
+            <div class="stat-label">
+                Total Applications
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+
+                {{ visitors
+                   |selectattr("status", "equalto", "Pending")
+                   |list
+                   |length }}
+
+            </div>
+
+            <div class="stat-label">
+                Pending
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+
+                {{ visitors
+                   |selectattr("status", "equalto", "Approved")
+                   |list
+                   |length }}
+
+            </div>
+
+            <div class="stat-label">
+                Approved
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+
+                {{ visitors
+                   |selectattr("status", "equalto", "Rejected")
+                   |list
+                   |length }}
+
+            </div>
+
+            <div class="stat-label">
+                Rejected
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         APPLICATION TABLE
+         ================================================== -->
+
+    <div class="table-card">
+
+        <h2>
+            Visitor Applications
+        </h2>
+
+
+        <input
+            type="text"
+            id="visitorSearch"
+            class="search-box"
+            placeholder="Search visitor name, phone, pass code..."
+            onkeyup="searchVisitors()"
+        >
+
+
+        {% if visitors %}
+
+        <table id="visitorTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ID
+                    </th>
+
+                    <th>
+                        Visitor
+                    </th>
+
+                    <th>
+                        Contact
+                    </th>
+
+                    <th>
+                        Visit Date
+                    </th>
+
+                    <th>
+                        Person to Meet
+                    </th>
+
+                    <th>
+                        Purpose
+                    </th>
+
+                    <th>
+                        Pass Code
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for visitor in visitors %}
+
+            <tr>
+
+
+                <td>
+                    {{ visitor["id"] }}
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        {{ visitor["visitor_name"] }}
+                    </strong>
+
+                    {% if visitor["relationship"] %}
+
+                    <br>
+
+                    <small>
+                        {{ visitor["relationship"] }}
+                    </small>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    {{ visitor["visitor_phone"] or "-" }}
+
+                    {% if visitor["visitor_email"] %}
+
+                    <br>
+
+                    <small>
+                        {{ visitor["visitor_email"] }}
+                    </small>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    {{ visitor["visit_date"] }}
+
+                    {% if visitor["arrival_time"] %}
+
+                    <br>
+
+                    <small>
+                        {{ visitor["arrival_time"] }}
+                    </small>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    {{ visitor["person_to_meet"] or "-" }}
+
+                </td>
+
+
+                <td>
+
+                    {{ visitor["purpose"] }}
+
+                </td>
+
+
+                <td>
+
+                    <code>
+                        {{ visitor["qr_code"] or visitor["pass_code"] }}
+                    </code>
+
+                </td>
+
+
+                <td>
+
+
+                    {% if visitor["status"]|lower == "approved" %}
+
+                    <span class="badge approved">
+                        ✓ APPROVED
+                    </span>
+
+
+                    {% elif visitor["status"]|lower == "rejected" %}
+
+                    <span class="badge rejected">
+                        ✕ REJECTED
+                    </span>
+
+
+                    {% else %}
+
+                    <span class="badge pending">
+                        ⏳ PENDING
+                    </span>
+
+                    {% endif %}
+
+
+                </td>
+
+
+                <td>
+
+
+                    <div class="actions">
+
+
+                        {% if visitor["status"]|lower != "approved" %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'visitor.admin_action',
+                                visitor_id=visitor['id'],
+                                action='approve'
+                            ) }}"
+                            class="action-form"
+                            onsubmit="return confirm('Approve this visitor application?');"
+                        >
+
+                            <button
+                                type="submit"
+                                class="action-button approve"
+                            >
+                                ✓ Approve
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+
+                        {% if visitor["status"]|lower != "rejected" %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'visitor.admin_action',
+                                visitor_id=visitor['id'],
+                                action='reject'
+                            ) }}"
+                            class="action-form"
+                            onsubmit="return confirm('Reject this visitor application?');"
+                        >
+
+                            <button
+                                type="submit"
+                                class="action-button reject"
+                            >
+                                ✕ Reject
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </td>
+
+
+            </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <div class="empty">
+
+            <div style="font-size:45px;">
+                👥
+            </div>
+
+            <h3>
+                No Visitor Applications
+            </h3>
+
+            <p>
+                There are currently no visitor pass applications.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+<script>
+
+function searchVisitors() {
+
+    const input =
+        document.getElementById("visitorSearch");
+
+    const filter =
+        input.value.toLowerCase();
+
+    const table =
+        document.getElementById("visitorTable");
+
+    if (!table) {
+        return;
+    }
+
+    const rows =
+        table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+
+        const text =
+            rows[i].textContent.toLowerCase();
+
+        rows[i].style.display =
+            text.includes(filter) ? "" : "none";
+    }
+}
+
+</script>
+
+
+</body>
+
+</html>
