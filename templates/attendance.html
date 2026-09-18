@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: #087f3f;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            opacity: .9;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            background: white;
+            color: #087f3f;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .title {
+            color: #087f3f;
+            margin-bottom: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 13px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #dcebe1;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #dcebe1;
+            text-align: center;
+        }
+
+        .summary-card .icon {
+            font-size: 27px;
+        }
+
+        .summary-card span {
+            display: block;
+            color: #718077;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .summary-card strong {
+            display: block;
+            color: #087f3f;
+            font-size: 24px;
+            margin-top: 5px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #087f3f;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c9ddd0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #087f3f;
+            box-shadow: 0 0 0 2px #dff2e7;
+        }
+
+        .button {
+            margin-top: 18px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #087f3f;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #066b35;
+        }
+
+        .info {
+            background: #e5f8ed;
+            border-left: 4px solid #087f3f;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e4eee8;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #e5f8ed;
+            color: #087f3f;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #e5f8ed;
+            color: #087f3f;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            color: #718077;
+            padding: 25px;
+        }
+
+        .flash {
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: #e5f8ed;
+            color: #087f3f;
+        }
+
+        .flash.error,
+        .flash.danger {
+            background: #fff0ee;
+            color: #b42318;
+        }
+
+        .flash.warning {
+            background: #fff8e6;
+            color: #765c00;
+        }
+
+        .flash.info {
+            background: #eef6ff;
+            color: #175cd3;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 11px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 18px 10px 85px;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <h1>
+            GITAM Campus Life
+        </h1>
+
+        <p>
+            Attendance Management
+        </p>
+
+    </div>
+
+
+    {% if session.get("role") == "student" %}
+
+        <a
+            href="{{ url_for('student_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% elif session.get("role") == "faculty" %}
+
+        <a
+            href="{{ url_for('faculty_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% else %}
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% endif %}
+
+</header>
+
+
+<main class="container">
+
+
+    <h2 class="title">
+        📊 Attendance
+    </h2>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if session.get("role") == "student" %}
+
+
+        <div class="info">
+
+            <strong>
+                Student Attendance
+            </strong>
+
+            <br>
+
+            You can view your attendance records here.
+            Students cannot mark or edit attendance.
+
+        </div>
+
+
+        <section class="summary">
+
+
+            <div class="summary-card">
+
+                <div class="icon">
+                    📚
+                </div>
+
+                <span>
+                    Total Classes
+                </span>
+
+                <strong>
+                    {{ total_classes|default(0) }}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="icon">
+                    ✅
+                </div>
+
+                <span>
+                    Present
+                </span>
+
+                <strong>
+                    {{ present_count|default(0) }}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="icon">
+                    📈
+                </div>
+
+                <span>
+                    Attendance %
+                </span>
+
+                <strong>
+                    {{ attendance_percentage|default(0) }}%
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <div class="card" style="margin-top:20px;">
+
+            <h3 style="color:#087f3f;">
+                My Attendance Records
+            </h3>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if attendance_records %}
+
+                            {% for record in attendance_records %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ record["date"]|default(record["attendance_date"]|default("—")) }}
+                                    </td>
+
+                                    <td>
+                                        {{ record["subject"]|default("General") }}
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge">
+                                            {{ record["status"]|default("Present") }}
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="3"
+                                    class="empty"
+                                >
+                                    No attendance records found.
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    {% elif session.get("role") == "faculty" %}
+
+
+        <div class="info">
+
+            <strong>
+                Faculty Attendance Management
+            </strong>
+
+            <br>
+
+            Faculty can mark attendance for students.
+            Faculty cannot mark their own attendance or
+            attendance for another faculty member.
+
+        </div>
+
+
+        <div class="card">
+
+            <h3 style="color:#087f3f;">
+                Mark Student Attendance
+            </h3>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('attendance.attendance_page') }}"
+            >
+
+
+                <div class="form-grid">
+
+
+                    <div>
+
+                        <label for="student_id">
+                            Student
+                        </label>
+
+                        <select
+                            id="student_id"
+                            name="student_id"
+                            required
+                        >
+
+                            <option value="">
+                                Select Student
+                            </option>
+
+                            {% for student in students|default([]) %}
+
+                                <option value="{{ student['id'] }}">
+                                    {{ student['name'] }}
+                                    {% if student['roll_no'] %}
+                                        - {{ student['roll_no'] }}
+                                    {% endif %}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="date">
+                            Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="date"
+                            name="date"
+                            value="{{ today|default('') }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="subject">
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+                            placeholder="Enter subject"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="status">
+                            Status
+                        </label>
+
+                        <select
+                            id="status"
+                            name="status"
+                            required
+                        >
+
+                            <option value="Present">
+                                Present
+                            </option>
+
+                            <option value="Absent">
+                                Absent
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    ✅ Mark Attendance
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3 style="color:#087f3f;">
+                Recent Student Attendance
+            </h3>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Student</th>
+                            <th>Roll Number</th>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if recent_attendance %}
+
+                            {% for record in recent_attendance %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ record["student_name"]|default(record["name"]|default("—")) }}
+                                    </td>
+
+                                    <td>
+                                        {{ record["roll_no"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ record["date"]|default(record["attendance_date"]|default("—")) }}
+                                    </td>
+
+                                    <td>
+                                        {{ record["subject"]|default("General") }}
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge">
+                                            {{ record["status"]|default("Present") }}
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="empty"
+                                >
+                                    No attendance records found.
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    {% elif session.get("role") == "admin" %}
+
+
+        <div class="info">
+
+            <strong>
+                Administrator Attendance Management
+            </strong>
+
+            <br>
+
+            Admin can mark attendance for both students
+            and faculty. Admin can manage attendance records
+            across the campus.
+
+        </div>
+
+
+        <div class="card">
+
+            <h3 style="color:#087f3f;">
+                Mark Attendance
+            </h3>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('attendance.attendance_page') }}"
+            >
+
+
+                <div class="form-grid">
+
+
+                    <div>
+
+                        <label for="user_id">
+                            Student / Faculty
+                        </label>
+
+                        <select
+                            id="user_id"
+                            name="user_id"
+                            required
+                        >
+
+                            <option value="">
+                                Select User
+                            </option>
+
+
+                            {% for student in students|default([]) %}
+
+                                <option value="{{ student['id'] }}">
+
+                                    Student -
+                                    {{ student['name'] }}
+
+                                    {% if student['roll_no'] %}
+                                        ({{ student['roll_no'] }})
+                                    {% endif %}
+
+                                </option>
+
+                            {% endfor %}
+
+
+                            {% for member in faculty|default([]) %}
+
+                                <option value="{{ member['id'] }}">
+
+                                    Faculty -
+                                    {{ member['name'] }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="admin_date">
+                            Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="admin_date"
+                            name="date"
+                            value="{{ today|default('') }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="admin_subject">
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            id="admin_subject"
+                            name="subject"
+                            placeholder="Enter subject"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="admin_status">
+                            Status
+                        </label>
+
+                        <select
+                            id="admin_status"
+                            name="status"
+                            required
+                        >
+
+                            <option value="Present">
+                                Present
+                            </option>
+
+                            <option value="Absent">
+                                Absent
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    ✅ Mark Attendance
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3 style="color:#087f3f;">
+                Recent Attendance
+            </h3>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if recent_attendance %}
+
+                            {% for record in recent_attendance %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ record["name"]|default(record["student_name"]|default("—")) }}
+                                    </td>
+
+                                    <td>
+                                        {{ record["role"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ record["date"]|default(record["attendance_date"]|default("—")) }}
+                                    </td>
+
+                                    <td>
+                                        {{ record["subject"]|default("General") }}
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge">
+                                            {{ record["status"]|default("Present") }}
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="empty"
+                                >
+                                    No attendance records found.
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
