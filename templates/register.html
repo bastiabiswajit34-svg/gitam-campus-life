@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .header {
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 22px 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 7px 0 0;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+            border: 1px solid #dcebe1;
+        }
+
+        .icon {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: #e5f8ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .card h2 {
+            text-align: center;
+            color: #087f3f;
+            margin: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #687b70;
+            font-size: 13px;
+            margin: 8px 0 22px;
+        }
+
+        .flash {
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: #e5f8ed;
+            color: #087f3f;
+        }
+
+        .flash.error,
+        .flash.danger {
+            background: #fff0ee;
+            color: #b42318;
+        }
+
+        .flash.warning {
+            background: #fff8e6;
+            color: #765c00;
+        }
+
+        .flash.info {
+            background: #eef6ff;
+            color: #175cd3;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            color: #087f3f;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c9ddd0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #087f3f;
+            box-shadow: 0 0 0 2px #dff2e7;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 45px;
+        }
+
+        .toggle {
+            position: absolute;
+            right: 7px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .button {
+            width: 100%;
+            margin-top: 23px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #087f3f;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #066b35;
+        }
+
+        .note {
+            margin-top: 18px;
+            padding: 12px;
+            background: #fff8e6;
+            border-left: 4px solid #d9a400;
+            border-radius: 7px;
+            color: #765c00;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .bottom-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #087f3f;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 20px 10px 90px;
+            }
+
+            .card {
+                padding: 22px 16px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <h1>
+        GITAM Campus Life
+    </h1>
+
+    <p>
+        Smart Campus Management System
+    </p>
+
+</header>
+
+
+<main class="container">
+
+
+    <div class="card">
+
+
+        <div class="icon">
+            🎓
+        </div>
+
+
+        <h2>
+            Student Registration
+        </h2>
+
+
+        <p class="subtitle">
+            Create your GITAM Campus Life student account
+        </p>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('auth.register') }}"
+        >
+
+
+            <label for="name">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
+
+
+            <div class="form-row">
+
+
+                <div>
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Choose username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="form-row">
+
+
+                <div>
+
+                    <label for="roll_no">
+                        Roll Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="roll_no"
+                        name="roll_no"
+                        placeholder="Enter roll number"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="branch">
+                        Branch
+                    </label>
+
+                    <input
+                        type="text"
+                        id="branch"
+                        name="branch"
+                        placeholder="Example: CSE"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <label for="year">
+                Year
+            </label>
+
+            <select
+                id="year"
+                name="year"
+                required
+            >
+
+                <option value="">
+                    Select Year
+                </option>
+
+                <option value="1">
+                    1st Year
+                </option>
+
+                <option value="2">
+                    2nd Year
+                </option>
+
+                <option value="3">
+                    3rd Year
+                </option>
+
+                <option value="4">
+                    4th Year
+                </option>
+
+            </select>
+
+
+            <label for="phone">
+                Phone Number
+            </label>
+
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter phone number"
+                autocomplete="tel"
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create password"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="toggle"
+                    onclick="togglePassword('password', this)"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+
+            <label for="confirm_password">
+                Confirm Password
+            </label>
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    placeholder="Confirm password"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="toggle"
+                    onclick="togglePassword('confirm_password', this)"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="button"
+            >
+                🎓 Create Student Account
+            </button>
+
+
+        </form>
+
+
+        <div class="note">
+
+            <strong>
+                Account approval:
+            </strong>
+
+            New student registrations are placed in
+            <strong>Pending</strong> status. An administrator
+            must approve the account before the student
+            can log in.
+
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.login') }}"
+            class="bottom-link"
+        >
+            ← Already have an account? Login
+        </a>
+
+
+    </div>
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+<script>
+
+function togglePassword(id, button) {
+
+    const input =
+        document.getElementById(id);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+        button.textContent = "🙈";
+
+    } else {
+
+        input.type = "password";
+        button.textContent = "👁️";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>
