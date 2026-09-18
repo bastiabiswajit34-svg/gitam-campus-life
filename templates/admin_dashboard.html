@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: #087f3f;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            opacity: .9;
+        }
+
+        .logout {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: white;
+            color: #087f3f;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .welcome {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            border-left: 5px solid #087f3f;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .06);
+            margin-bottom: 22px;
+        }
+
+        .welcome h2 {
+            margin: 0 0 6px;
+            color: #087f3f;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #687b70;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 13px;
+            padding: 19px;
+            border: 1px solid #dcebe1;
+            box-shadow: 0 4px 13px rgba(0, 0, 0, .05);
+        }
+
+        .stat-icon {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .stat span {
+            display: block;
+            color: #718077;
+            font-size: 12px;
+        }
+
+        .stat strong {
+            display: block;
+            color: #087f3f;
+            font-size: 25px;
+            margin-top: 4px;
+        }
+
+        .pending {
+            border-left: 4px solid #d9a400;
+        }
+
+        .section-title {
+            color: #087f3f;
+            font-size: 19px;
+            margin: 25px 0 13px;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .management {
+            background: white;
+            border: 1px solid #dcebe1;
+            border-radius: 13px;
+            padding: 20px 15px;
+            text-decoration: none;
+            color: #183b2a;
+            box-shadow: 0 4px 13px rgba(0, 0, 0, .04);
+            transition: .2s ease;
+        }
+
+        .management:hover {
+            transform: translateY(-3px);
+            border-color: #087f3f;
+            box-shadow: 0 7px 18px rgba(0, 0, 0, .08);
+        }
+
+        .management-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .management h3 {
+            margin: 0 0 6px;
+            color: #087f3f;
+            font-size: 15px;
+        }
+
+        .management p {
+            margin: 0;
+            color: #718077;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .note {
+            margin-top: 24px;
+            padding: 14px;
+            background: #e5f8ed;
+            border-left: 4px solid #087f3f;
+            border-radius: 8px;
+            color: #245b3c;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 11px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+
+            .stats,
+            .management-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            .stats,
+            .management-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 18px 10px 85px;
+            }
+
+            .welcome {
+                padding: 18px;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <h1>
+            GITAM Campus Life
+        </h1>
+
+        <p>
+            Administrator Dashboard
+        </p>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('auth.logout') }}"
+        class="logout"
+    >
+        Logout
+    </a>
+
+</header>
+
+
+<main class="container">
+
+
+    <section class="welcome">
+
+        <h2>
+            Welcome, Administrator 👨‍💼
+        </h2>
+
+        <p>
+            Manage users, campus services, requests, notices and events.
+        </p>
+
+    </section>
+
+
+    <section class="stats">
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                🎓
+            </div>
+
+            <span>
+                Students
+            </span>
+
+            <strong>
+                {{ students|default(0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                👨‍🏫
+            </div>
+
+            <span>
+                Faculty
+            </span>
+
+            <strong>
+                {{ faculty|default(0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat pending">
+
+            <div class="stat-icon">
+                ⏳
+            </div>
+
+            <span>
+                Pending Users
+            </span>
+
+            <strong>
+                {{ pending_users|default(0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📅
+            </div>
+
+            <span>
+                Total Events
+            </span>
+
+            <strong>
+                {{ total_events|default(0) }}
+            </strong>
+
+        </div>
+
+
+    </section>
+
+
+    <h2 class="section-title">
+        Pending Requests
+    </h2>
+
+
+    <section class="stats">
+
+
+        <div class="stat pending">
+
+            <div class="stat-icon">
+                📝
+            </div>
+
+            <span>
+                Leave Requests
+            </span>
+
+            <strong>
+                {{ pending_leave|default(0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat pending">
+
+            <div class="stat-icon">
+                🚪
+            </div>
+
+            <span>
+                Gate Pass Requests
+            </span>
+
+            <strong>
+                {{ pending_gate_pass|default(0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat pending">
+
+            <div class="stat-icon">
+                📜
+            </div>
+
+            <span>
+                Certificate Requests
+            </span>
+
+            <strong>
+                {{ pending_certificates|default(0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="stat pending">
+
+            <div class="stat-icon">
+                ⚠️
+            </div>
+
+            <span>
+                Complaints
+            </span>
+
+            <strong>
+                {{ pending_complaints|default(0) }}
+            </strong>
+
+        </div>
+
+
+    </section>
+
+
+    <h2 class="section-title">
+        Management
+    </h2>
+
+
+    <section class="management-grid">
+
+
+        <a
+            href="{{ url_for('admin_users.admin_users_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                👥
+            </div>
+
+            <h3>
+                User Management
+            </h3>
+
+            <p>
+                Approve, reject, edit and manage student and faculty accounts.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('attendance.attendance_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                📊
+            </div>
+
+            <h3>
+                Attendance
+            </h3>
+
+            <p>
+                Manage attendance records for students and faculty.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('leave.leave_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                📝
+            </div>
+
+            <h3>
+                Leave Requests
+            </h3>
+
+            <p>
+                Review and process leave applications.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('gate_pass.gate_pass_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                🚪
+            </div>
+
+            <h3>
+                Gate Pass
+            </h3>
+
+            <p>
+                Review and approve gate-pass requests.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('certificates.certificates_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                📜
+            </div>
+
+            <h3>
+                Certificates
+            </h3>
+
+            <p>
+                Process certificate requests.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('complaints.complaints_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                ⚠️
+            </div>
+
+            <h3>
+                Complaints
+            </h3>
+
+            <p>
+                Review and resolve campus complaints.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('notices.notices_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                📢
+            </div>
+
+            <h3>
+                Notices
+            </h3>
+
+            <p>
+                Create and publish campus notices.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('notifications.notifications_page') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                🔔
+            </div>
+
+            <h3>
+                Notifications
+            </h3>
+
+            <p>
+                Create and send campus notifications.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('visitor.admin_visitors') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                🪪
+            </div>
+
+            <h3>
+                Visitor Pass
+            </h3>
+
+            <p>
+                Review, approve and reject visitor applications.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('events.admin_events') }}"
+            class="management"
+        >
+
+            <div class="management-icon">
+                🎉
+            </div>
+
+            <h3>
+                Event Management
+            </h3>
+
+            <p>
+                Create, publish and manage campus events.
+            </p>
+
+        </a>
+
+
+    </section>
+
+
+    <div class="note">
+
+        <strong>
+            ℹ️ Administrator Access:
+        </strong>
+
+        The administrator manages users, attendance,
+        leave requests, gate passes, certificates,
+        complaints, notices, notifications, visitor passes
+        and campus events.
+
+        <br><br>
+
+        Students and faculty submit their own requests.
+        The administrator reviews and processes them.
+
+    </div>
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
