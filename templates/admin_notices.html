@@ -1,0 +1,426 @@
+{% extends "base.html" %}
+
+{% block title %}Notice Management - GITAM Campus Life{% endblock %}
+
+{% block content %}
+
+<style>
+    .notice-admin {
+        max-width: 1150px;
+        margin: 0 auto;
+        padding: 25px 15px 60px;
+    }
+
+    .notice-header {
+        background: linear-gradient(135deg, #087f3f, #0aa653);
+        color: white;
+        padding: 30px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+    }
+
+    .notice-header h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+    }
+
+    .notice-header p {
+        margin: 0;
+        opacity: .95;
+    }
+
+    .notice-box {
+        background: white;
+        border: 1px solid #dcebe2;
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 18px rgba(0,0,0,.06);
+    }
+
+    .notice-box h2 {
+        color: #087f3f;
+        margin-top: 0;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        color: #234535;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #cbded3;
+        border-radius: 9px;
+        padding: 12px;
+        font-size: 14px;
+        outline: none;
+        font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #087f3f;
+        box-shadow: 0 0 0 3px #e9f8ef;
+    }
+
+    .form-group textarea {
+        min-height: 140px;
+        resize: vertical;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        border: none;
+        background: #087f3f;
+        color: white;
+        padding: 11px 20px;
+        border-radius: 9px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-primary:hover {
+        background: #066b35;
+    }
+
+    .notice-item {
+        border: 1px solid #dfece4;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 15px;
+        background: #fbfefc;
+    }
+
+    .notice-item h3 {
+        color: #087f3f;
+        margin: 0 0 10px;
+        font-size: 20px;
+    }
+
+    .notice-content {
+        color: #40564a;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        margin-bottom: 12px;
+    }
+
+    .notice-date {
+        color: #78857d;
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+
+    .notice-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        display: inline-block;
+        padding: 8px 13px;
+        border-radius: 7px;
+        text-decoration: none;
+        border: none;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .edit-btn {
+        background: #e8f5ed;
+        color: #087f3f;
+    }
+
+    .publish-btn {
+        background: #087f3f;
+        color: white;
+    }
+
+    .delete-btn {
+        background: #ffe9e9;
+        color: #b42318;
+    }
+
+    .empty-notices {
+        text-align: center;
+        padding: 35px 15px;
+        color: #718078;
+    }
+
+    .info-box {
+        background: #f1fbf5;
+        border-left: 5px solid #087f3f;
+        border-radius: 9px;
+        padding: 18px;
+        color: #31523f;
+        line-height: 1.6;
+        margin-top: 20px;
+    }
+
+    .footer-text {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #dce9e1;
+        color: #087f3f;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+        .notice-admin {
+            padding: 15px 10px 40px;
+        }
+
+        .notice-header {
+            padding: 23px;
+        }
+
+        .notice-header h1 {
+            font-size: 25px;
+        }
+
+        .notice-box {
+            padding: 18px;
+        }
+    }
+</style>
+
+
+<div class="notice-admin">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="notice-header">
+
+        <h1>📢 Notice Management</h1>
+
+        <p>
+            Create and manage important GITAM Campus Life notices.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         CREATE NOTICE
+    ====================================================== -->
+
+    <div class="notice-box">
+
+        <h2>➕ Add New Notice</h2>
+
+        <form
+            method="POST"
+            action="{{ url_for('notices.create') }}"
+        >
+
+            <div class="form-group">
+
+                <label for="title">
+                    Notice Title
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Enter notice title"
+                    maxlength="200"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="content">
+                    Notice Content
+                </label>
+
+                <textarea
+                    id="content"
+                    name="content"
+                    placeholder="Write the complete notice here..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn-primary"
+            >
+                📢 Publish Notice
+            </button>
+
+        </form>
+
+
+        <div class="info-box">
+
+            <strong>Notice workflow:</strong>
+
+            Create the notice using the form above.
+            The notice will then appear in the campus notice
+            section for students and faculty.
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EXISTING NOTICES
+    ====================================================== -->
+
+    <div class="notice-box">
+
+        <h2>📋 Existing Notices</h2>
+
+
+        {% if notices %}
+
+            {% for notice in notices %}
+
+                <div class="notice-item">
+
+                    <h3>
+                        {{ notice.title }}
+                    </h3>
+
+
+                    <div class="notice-content">
+                        {{ notice.content }}
+                    </div>
+
+
+                    <div class="notice-date">
+
+                        📅
+                        {{ notice.created_at|default("Date not available") }}
+
+                    </div>
+
+
+                    <div class="notice-actions">
+
+
+                        <!-- EDIT -->
+
+                        <a
+                            href="{{ url_for(
+                                'notices.update',
+                                notice_id=notice.id
+                            ) }}"
+                            class="action-btn edit-btn"
+                        >
+                            ✏️ Edit
+                        </a>
+
+
+                        <!-- PUBLISH -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'notices.publish',
+                                notice_id=notice.id
+                            ) }}"
+                            style="display:inline;"
+                        >
+
+                            <button
+                                type="submit"
+                                class="action-btn publish-btn"
+                                onclick="return confirm(
+                                    'Publish this notice?'
+                                );"
+                            >
+                                📢 Publish
+                            </button>
+
+                        </form>
+
+
+                        <!-- DELETE -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'notices.delete',
+                                notice_id=notice.id
+                            ) }}"
+                            style="display:inline;"
+                        >
+
+                            <button
+                                type="submit"
+                                class="action-btn delete-btn"
+                                onclick="return confirm(
+                                    'Are you sure you want to delete this notice?'
+                                );"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="empty-notices">
+
+                <div style="font-size:42px;">
+                    📢
+                </div>
+
+                <h3>
+                    No Notices Yet
+                </h3>
+
+                <p>
+                    Create your first campus notice using
+                    the form above.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="footer-text">
+        MADE BY TEAM INNOVATORS HUB
+    </div>
+
+</div>
+
+{% endblock %}
