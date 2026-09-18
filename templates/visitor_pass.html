@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Visitor Pass - GITAM Campus Life</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .header {
+            background: #087f3f;
+            color: white;
+            padding: 20px 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #087f3f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .pass-card {
+            background: white;
+            border: 2px solid #087f3f;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,.08);
+        }
+
+        .pass-header {
+            background: #087f3f;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .pass-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .pass-header p {
+            margin: 7px 0 0;
+            font-size: 12px;
+        }
+
+        .approved {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 7px 14px;
+            border-radius: 20px;
+            background: white;
+            color: #087f3f;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pass-body {
+            padding: 25px;
+        }
+
+        .visitor-name {
+            text-align: center;
+            color: #087f3f;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            border-top: 1px solid #dcebe1;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 11px 0;
+            border-bottom: 1px solid #edf3ef;
+        }
+
+        .detail strong {
+            color: #087f3f;
+        }
+
+        .detail span {
+            text-align: right;
+        }
+
+        .qr-section {
+            text-align: center;
+            border-top: 1px dashed #b8d6c4;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        .qr-section h3 {
+            color: #087f3f;
+            margin-top: 0;
+        }
+
+        .qr-section img {
+            width: 210px;
+            height: 210px;
+            border: 8px solid white;
+            box-shadow: 0 3px 12px rgba(0,0,0,.12);
+        }
+
+        .pass-code {
+            margin-top: 12px;
+            display: inline-block;
+            padding: 9px 14px;
+            background: #eef8f1;
+            color: #087f3f;
+            border-radius: 7px;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 13px;
+            background: #eef8f1;
+            border-left: 4px solid #087f3f;
+            border-radius: 7px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .button {
+            display: inline-block;
+            border: none;
+            background: #087f3f;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #066b35;
+        }
+
+        .button.secondary {
+            background: white;
+            color: #087f3f;
+            border: 2px solid #087f3f;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 21px;
+            }
+
+            .container {
+                padding: 20px 10px 90px;
+            }
+
+            .pass-body {
+                padding: 18px;
+            }
+
+            .detail {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .detail span {
+                text-align: left;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .button {
+                text-align: center;
+            }
+
+        }
+
+        @media print {
+
+            .header,
+            .back,
+            .buttons,
+            .footer {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .pass-card {
+                box-shadow: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <h1>
+        🎫 Visitor Pass
+    </h1>
+
+    <p>
+        GITAM Campus Life
+    </p>
+
+</header>
+
+
+<main class="container">
+
+
+    <a
+        href="{{ url_for('visitor.status') }}"
+        class="back"
+    >
+        ← Back to Visitor Status
+    </a>
+
+
+    {% if visitor and visitor["status"]|lower == "approved" %}
+
+
+    <div class="pass-card">
+
+
+        <!-- ==================================================
+             PASS HEADER
+             ================================================== -->
+
+        <div class="pass-header">
+
+            <h2>
+                GITAM CAMPUS LIFE
+            </h2>
+
+            <p>
+                OFFICIAL VISITOR PASS
+            </p>
+
+            <span class="approved">
+                ✓ APPROVED
+            </span>
+
+        </div>
+
+
+        <!-- ==================================================
+             PASS BODY
+             ================================================== -->
+
+        <div class="pass-body">
+
+
+            <div class="visitor-name">
+
+                {{ visitor["visitor_name"] }}
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div class="details">
+
+
+                <div class="detail">
+
+                    <strong>
+                        Pass Code
+                    </strong>
+
+                    <span>
+                        {{ visitor["qr_code"] or visitor["pass_code"] }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Visit Date
+                    </strong>
+
+                    <span>
+                        {{ visitor["visit_date"] }}
+                    </span>
+
+                </div>
+
+
+                {% if visitor["arrival_time"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        Arrival Time
+                    </strong>
+
+                    <span>
+                        {{ visitor["arrival_time"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if visitor["visitor_phone"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        Phone
+                    </strong>
+
+                    <span>
+                        {{ visitor["visitor_phone"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if visitor["relationship"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        Relationship
+                    </strong>
+
+                    <span>
+                        {{ visitor["relationship"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if visitor["person_to_meet"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        Person to Meet
+                    </strong>
+
+                    <span>
+                        {{ visitor["person_to_meet"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if visitor["visitor_count"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        Visitor Count
+                    </strong>
+
+                    <span>
+                        {{ visitor["visitor_count"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="detail">
+
+                    <strong>
+                        Purpose
+                    </strong>
+
+                    <span>
+                        {{ visitor["purpose"] }}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ==================================================
+                 QR CODE
+                 ================================================== -->
+
+            <div class="qr-section">
+
+                <h3>
+                    Scan Visitor Pass
+                </h3>
+
+
+                {% if qr_code %}
+
+                <img
+                    src="{{ qr_code }}"
+                    alt="Visitor Pass QR Code"
+                >
+
+                {% else %}
+
+                <p>
+                    QR code unavailable.
+                </p>
+
+                {% endif %}
+
+
+                <br>
+
+
+                <span class="pass-code">
+
+                    {{ visitor["qr_code"] or visitor["pass_code"] }}
+
+                </span>
+
+
+            </div>
+
+
+            <!-- ==================================================
+                 WARNING
+                 ================================================== -->
+
+            <div class="warning">
+
+                <strong>
+                    Important:
+                </strong>
+
+                This visitor pass is valid only for the
+                approved visitor, date, and purpose shown
+                above. The QR code can be used for
+                verification at the campus entry point.
+
+            </div>
+
+
+            <!-- ==================================================
+                 BUTTONS
+                 ================================================== -->
+
+            <div class="buttons">
+
+                <button
+                    type="button"
+                    class="button"
+                    onclick="window.print()"
+                >
+                    🖨️ Print Pass
+                </button>
+
+
+                <a
+                    href="{{ url_for('visitor.status') }}"
+                    class="button secondary"
+                >
+                    Check Status
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- ==================================================
+         INVALID / NOT APPROVED
+         ================================================== -->
+
+    <div class="pass-card">
+
+        <div class="pass-body">
+
+            <div class="status-box"
+                 style="
+                    text-align:center;
+                    padding:25px;
+                    background:#ffe8e5;
+                    border-radius:10px;
+                    color:#b42318;
+                 ">
+
+                <div style="font-size:45px;">
+                    ❌
+                </div>
+
+                <h2>
+                    Visitor Pass Not Available
+                </h2>
+
+                <p>
+                    A visitor pass can only be displayed
+                    after the application has been approved
+                    by the administrator.
+                </p>
+
+                <a
+                    href="{{ url_for('visitor.status') }}"
+                    class="button"
+                >
+                    Check Application Status
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
