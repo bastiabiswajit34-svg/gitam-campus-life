@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Event Details - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .header {
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 22px 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 7px 0 0;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: white;
+            color: #087f3f;
+            border: 2px solid #087f3f;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            background: #e5f8ed;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+        }
+
+        .event-header {
+            background: #087f3f;
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .event-header h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .event-header p {
+            margin: 8px 0 0;
+            font-size: 13px;
+        }
+
+        .event-body {
+            padding: 25px;
+        }
+
+        .section-title {
+            color: #087f3f;
+            margin-top: 0;
+        }
+
+        .description {
+            color: #52695b;
+            line-height: 1.7;
+            font-size: 15px;
+            white-space: pre-line;
+        }
+
+        .details {
+            margin-top: 25px;
+            border-top: 1px solid #dcebe1;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 13px 0;
+            border-bottom: 1px solid #edf3ef;
+        }
+
+        .detail strong {
+            color: #087f3f;
+        }
+
+        .detail span {
+            text-align: right;
+        }
+
+        .registration-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: #eef8f1;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .registration-box h3 {
+            color: #087f3f;
+            margin-top: 0;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 20px;
+            background: #087f3f;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: #066b35;
+        }
+
+        .button.secondary {
+            background: white;
+            color: #087f3f;
+            border: 2px solid #087f3f;
+        }
+
+        .faculty-note {
+            padding: 12px;
+            background: #fff8e6;
+            border-left: 4px solid #d9a400;
+            color: #765c00;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        .admin-note {
+            padding: 12px;
+            background: #eef8f1;
+            border-left: 4px solid #087f3f;
+            color: #087f3f;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 20px 10px 90px;
+            }
+
+            .event-header h2 {
+                font-size: 23px;
+            }
+
+            .event-body {
+                padding: 18px;
+            }
+
+            .detail {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .detail span {
+                text-align: left;
+            }
+
+            .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <h1>
+        🎉 Campus Event
+    </h1>
+
+    <p>
+        GITAM Campus Life
+    </p>
+
+</header>
+
+
+<main class="container">
+
+
+    <a
+        href="{{ url_for('events.events_page') }}"
+        class="back"
+    >
+        ← Back to Events
+    </a>
+
+
+    {% if event %}
+
+
+    <div class="event-card">
+
+
+        <div class="event-header">
+
+            <h2>
+                {{ event["title"] }}
+            </h2>
+
+            <p>
+                GITAM Campus Life Event
+            </p>
+
+        </div>
+
+
+        <div class="event-body">
+
+
+            <h3 class="section-title">
+                About This Event
+            </h3>
+
+
+            <div class="description">
+
+                {{ event["description"] or "No description available." }}
+
+            </div>
+
+
+            <div class="details">
+
+
+                {% if event["event_date"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        📅 Date
+                    </strong>
+
+                    <span>
+                        {{ event["event_date"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if event["event_time"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        🕐 Time
+                    </strong>
+
+                    <span>
+                        {{ event["event_time"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if event["venue"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        📍 Venue
+                    </strong>
+
+                    <span>
+                        {{ event["venue"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if event["organizer"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        👤 Organizer
+                    </strong>
+
+                    <span>
+                        {{ event["organizer"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if event["max_participants"] %}
+
+                <div class="detail">
+
+                    <strong>
+                        👥 Maximum Participants
+                    </strong>
+
+                    <span>
+                        {{ event["max_participants"] }}
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- STUDENT -->
+
+            {% if session.get("role") == "student" %}
+
+            <div class="registration-box">
+
+                <h3>
+                    Event Registration
+                </h3>
+
+                <p>
+                    You can register for this campus event.
+                </p>
+
+
+                <a
+                    href="{{ url_for(
+                        'events.event_register',
+                        event_id=event['id']
+                    ) }}"
+                    class="button"
+                >
+                    📝 Register for Event
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- FACULTY -->
+
+            {% if session.get("role") == "faculty" %}
+
+            <div class="faculty-note">
+
+                <strong>
+                    Faculty Access:
+                </strong>
+
+                Faculty members can view event information,
+                but event registration is available only
+                to students.
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ADMIN -->
+
+            {% if session.get("role") == "admin" %}
+
+            <div class="admin-note">
+
+                <strong>
+                    Administrator Mode:
+                </strong>
+
+                You are viewing this event as an administrator.
+
+            </div>
+
+
+            <a
+                href="{{ url_for('events.admin_events') }}"
+                class="button secondary"
+            >
+                ⚙️ Manage Events
+            </a>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="event-card">
+
+        <div class="event-body"
+             style="text-align:center; padding:45px 20px;">
+
+            <div style="font-size:50px;">
+                ❌
+            </div>
+
+            <h2 style="color:#087f3f;">
+                Event Not Found
+            </h2>
+
+            <p>
+                The requested event could not be found.
+            </p>
+
+            <a
+                href="{{ url_for('events.events_page') }}"
+                class="button"
+            >
+                View Events
+            </a>
+
+        </div>
+
+    </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
