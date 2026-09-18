@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Leave Request - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: #087f3f;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            opacity: .9;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            background: white;
+            color: #087f3f;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .title {
+            color: #087f3f;
+            margin-bottom: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 13px;
+            padding: 22px;
+            margin-bottom: 20px;
+            border: 1px solid #dcebe1;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #087f3f;
+        }
+
+        .info {
+            background: #e5f8ed;
+            border-left: 4px solid #087f3f;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .admin-info {
+            background: #fff8e6;
+            border-left: 4px solid #d9a400;
+            color: #765c00;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #087f3f;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c9ddd0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            outline: none;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #087f3f;
+            box-shadow: 0 0 0 2px #dff2e7;
+        }
+
+        .button {
+            margin-top: 18px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #087f3f;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #066b35;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e4eee8;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #e5f8ed;
+            color: #087f3f;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #fff8e6;
+            color: #765c00;
+        }
+
+        .badge.approved {
+            background: #e5f8ed;
+            color: #087f3f;
+        }
+
+        .badge.rejected {
+            background: #fff0ee;
+            color: #b42318;
+        }
+
+        .action {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 2px;
+        }
+
+        .approve {
+            background: #087f3f;
+            color: white;
+        }
+
+        .reject {
+            background: #b42318;
+            color: white;
+        }
+
+        .empty {
+            text-align: center;
+            color: #718077;
+            padding: 25px;
+        }
+
+        .flash {
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: #e5f8ed;
+            color: #087f3f;
+        }
+
+        .flash.error,
+        .flash.danger {
+            background: #fff0ee;
+            color: #b42318;
+        }
+
+        .flash.warning {
+            background: #fff8e6;
+            color: #765c00;
+        }
+
+        .flash.info {
+            background: #eef6ff;
+            color: #175cd3;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 11px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .container {
+                padding: 18px 10px 85px;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <h1>
+            GITAM Campus Life
+        </h1>
+
+        <p>
+            Leave Request Management
+        </p>
+
+    </div>
+
+
+    {% if session.get("role") == "student" %}
+
+        <a
+            href="{{ url_for('student_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% elif session.get("role") == "faculty" %}
+
+        <a
+            href="{{ url_for('faculty_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% else %}
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% endif %}
+
+</header>
+
+
+<main class="container">
+
+
+    <h2 class="title">
+        📝 Leave Requests
+    </h2>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if session.get("role") in ["student", "faculty"] %}
+
+
+        <div class="info">
+
+            <strong>
+                Apply for Leave
+            </strong>
+
+            <br>
+
+            Submit your leave application below.
+            Your request will remain pending until reviewed
+            by the administrator.
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                New Leave Request
+            </h3>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('leave.leave_page') }}"
+            >
+
+
+                <div class="form-grid">
+
+
+                    <div>
+
+                        <label for="from_date">
+                            From Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="from_date"
+                            name="from_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="to_date">
+                            To Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="to_date"
+                            name="to_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="leave_type">
+                            Leave Type
+                        </label>
+
+                        <select
+                            id="leave_type"
+                            name="leave_type"
+                            required
+                        >
+
+                            <option value="">
+                                Select Leave Type
+                            </option>
+
+                            <option value="Medical">
+                                Medical Leave
+                            </option>
+
+                            <option value="Personal">
+                                Personal Leave
+                            </option>
+
+                            <option value="Emergency">
+                                Emergency Leave
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="reason">
+                            Reason
+                        </label>
+
+                        <input
+                            type="text"
+                            id="reason"
+                            name="reason"
+                            placeholder="Enter reason"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="full">
+
+                        <label for="description">
+                            Additional Details
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            placeholder="Enter additional details if required..."
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    📝 Submit Leave Request
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                My Leave Requests
+            </h3>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Type</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if leave_requests %}
+
+                            {% for request in leave_requests %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ request["from_date"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["to_date"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["leave_type"]|default("Leave") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["reason"]|default("—") }}
+                                    </td>
+
+                                    <td>
+
+                                        {% set status = request["status"]|default("Pending") %}
+
+                                        <span class="badge
+                                            {% if status|lower == 'approved' %}
+                                                approved
+                                            {% elif status|lower == 'rejected' %}
+                                                rejected
+                                            {% endif %}
+                                        ">
+                                            {{ status }}
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="empty"
+                                >
+                                    You have not submitted any leave requests yet.
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    {% elif session.get("role") == "admin" %}
+
+
+        <div class="info admin-info">
+
+            <strong>
+                Administrator Leave Management
+            </strong>
+
+            <br>
+
+            Review leave applications submitted by students
+            and faculty. Administrators do not submit leave
+            requests on behalf of users.
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                All Leave Requests
+            </h3>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Type</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if leave_requests %}
+
+                            {% for request in leave_requests %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ request["name"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["role"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["from_date"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["to_date"]|default("—") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["leave_type"]|default("Leave") }}
+                                    </td>
+
+                                    <td>
+                                        {{ request["reason"]|default("—") }}
+                                    </td>
+
+                                    <td>
+
+                                        {% set status = request["status"]|default("Pending") %}
+
+                                        <span class="badge
+                                            {% if status|lower == 'approved' %}
+                                                approved
+                                            {% elif status|lower == 'rejected' %}
+                                                rejected
+                                            {% endif %}
+                                        ">
+                                            {{ status }}
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        {% if status|lower == "pending" %}
+
+                                            <a
+                                                href="{{ url_for('leave.admin_action', request_id=request['id'], action='approve') }}"
+                                                class="action approve"
+                                            >
+                                                Approve
+                                            </a>
+
+                                            <a
+                                                href="{{ url_for('leave.admin_action', request_id=request['id'], action='reject') }}"
+                                                class="action reject"
+                                            >
+                                                Reject
+                                            </a>
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="8"
+                                    class="empty"
+                                >
+                                    No leave requests found.
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
