@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notices - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: #087f3f;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            opacity: .9;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            background: white;
+            color: #087f3f;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .title {
+            color: #087f3f;
+            margin-bottom: 20px;
+        }
+
+        .notice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .notice-card {
+            background: white;
+            border: 1px solid #dcebe1;
+            border-radius: 13px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+            transition: .2s ease;
+        }
+
+        .notice-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(0, 0, 0, .08);
+        }
+
+        .notice-title {
+            color: #087f3f;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .notice-description {
+            color: #4b6355;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-line;
+        }
+
+        .notice-meta {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #e4eee8;
+            font-size: 12px;
+            color: #718077;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #e5f8ed;
+            color: #087f3f;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .admin-card {
+            background: white;
+            border: 1px solid #dcebe1;
+            border-radius: 13px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        }
+
+        .admin-card h3 {
+            color: #087f3f;
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #087f3f;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c9ddd0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #087f3f;
+            box-shadow: 0 0 0 2px #dff2e7;
+        }
+
+        .button {
+            margin-top: 18px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #087f3f;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #066b35;
+        }
+
+        .flash {
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: #e5f8ed;
+            color: #087f3f;
+        }
+
+        .flash.error,
+        .flash.danger {
+            background: #fff0ee;
+            color: #b42318;
+        }
+
+        .flash.warning {
+            background: #fff8e6;
+            color: #765c00;
+        }
+
+        .flash.info {
+            background: #eef6ff;
+            color: #175cd3;
+        }
+
+        .empty {
+            background: white;
+            border: 1px solid #dcebe1;
+            border-radius: 13px;
+            padding: 35px 20px;
+            text-align: center;
+            color: #718077;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 11px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .notice-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .container {
+                padding: 18px 10px 85px;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <h1>
+            GITAM Campus Life
+        </h1>
+
+        <p>
+            Campus Notices
+        </p>
+
+    </div>
+
+
+    {% if session.get("role") == "student" %}
+
+        <a
+            href="{{ url_for('student_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% elif session.get("role") == "faculty" %}
+
+        <a
+            href="{{ url_for('faculty_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% else %}
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    {% endif %}
+
+</header>
+
+
+<main class="container">
+
+
+    <h2 class="title">
+        📢 Campus Notices
+    </h2>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if session.get("role") == "admin" %}
+
+
+        <div class="admin-card">
+
+            <h3>
+                Publish New Notice
+            </h3>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('notices.notices_page') }}"
+            >
+
+                <div class="form-grid">
+
+
+                    <div class="full">
+
+                        <label for="title">
+                            Notice Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="Enter notice title"
+                            maxlength="200"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="notice_date">
+                            Notice Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="notice_date"
+                            name="notice_date"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="category">
+                            Category
+                        </label>
+
+                        <select
+                            id="category"
+                            name="category"
+                        >
+
+                            <option value="General">
+                                General
+                            </option>
+
+                            <option value="Academic">
+                                Academic
+                            </option>
+
+                            <option value="Examination">
+                                Examination
+                            </option>
+
+                            <option value="Event">
+                                Event
+                            </option>
+
+                            <option value="Important">
+                                Important
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="full">
+
+                        <label for="description">
+                            Notice Details
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            placeholder="Write the notice details..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    📢 Publish Notice
+                </button>
+
+            </form>
+
+        </div>
+
+
+    {% endif %}
+
+
+    {% if notices %}
+
+
+        <div class="notice-grid">
+
+
+            {% for notice in notices %}
+
+                <article class="notice-card">
+
+
+                    <span class="badge">
+
+                        {{ notice["category"]|default("General") }}
+
+                    </span>
+
+
+                    <h3 class="notice-title">
+
+                        {{ notice["title"]|default("Campus Notice") }}
+
+                    </h3>
+
+
+                    <div class="notice-description">
+
+                        {{ notice["description"]|default(notice["content"]|default("No details available.")) }}
+
+                    </div>
+
+
+                    <div class="notice-meta">
+
+                        {% if notice["notice_date"]|default("") %}
+
+                            📅 {{ notice["notice_date"] }}
+
+                            &nbsp; • &nbsp;
+
+                        {% endif %}
+
+
+                        {% if notice["created_at"]|default("") %}
+
+                            Published:
+                            {{ notice["created_at"] }}
+
+                        {% endif %}
+
+                    </div>
+
+
+                </article>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            <h3>
+                📭 No Notices Available
+            </h3>
+
+            <p>
+                There are currently no published campus notices.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
