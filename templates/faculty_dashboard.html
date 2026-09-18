@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Faculty Dashboard - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: #087f3f;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            opacity: .9;
+        }
+
+        .logout {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: white;
+            color: #087f3f;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 25px 15px 85px;
+        }
+
+        .welcome {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            border-left: 5px solid #087f3f;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .06);
+            margin-bottom: 22px;
+        }
+
+        .welcome h2 {
+            margin: 0 0 6px;
+            color: #087f3f;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #687b70;
+            font-size: 14px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 17px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        }
+
+        .info-card span {
+            display: block;
+            color: #718077;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .info-card strong {
+            color: #087f3f;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .section-title {
+            color: #087f3f;
+            margin: 25px 0 13px;
+            font-size: 19px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .feature {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 13px;
+            text-decoration: none;
+            color: #183b2a;
+            border: 1px solid #dcebe1;
+            box-shadow: 0 4px 13px rgba(0, 0, 0, .04);
+            transition: .2s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-3px);
+            border-color: #087f3f;
+            box-shadow: 0 7px 18px rgba(0, 0, 0, .08);
+        }
+
+        .feature-icon {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            margin: 0 0 6px;
+            color: #087f3f;
+            font-size: 15px;
+        }
+
+        .feature p {
+            margin: 0;
+            color: #718077;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .attendance {
+            border: 2px solid #087f3f;
+        }
+
+        .no-access {
+            background: #f5f5f5;
+            border-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .no-access:hover {
+            transform: none;
+            border-color: #ddd;
+        }
+
+        .notice {
+            background: #fff8e6;
+            border-left: 4px solid #d9a400;
+            border-radius: 8px;
+            padding: 13px;
+            margin-top: 22px;
+            font-size: 13px;
+            color: #765c00;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 11px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 850px) {
+
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+
+            .container {
+                padding: 18px 10px 80px;
+            }
+
+            .info-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome {
+                padding: 18px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <h1>
+            GITAM Campus Life
+        </h1>
+
+        <p>
+            Faculty Dashboard
+        </p>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('auth.logout') }}"
+        class="logout"
+    >
+        Logout
+    </a>
+
+</header>
+
+
+<main class="container">
+
+
+    <section class="welcome">
+
+        <h2>
+            Welcome, {{ user["name"] if user else "Faculty" }} 👨‍🏫
+        </h2>
+
+        <p>
+            Manage your academic and campus services from one place.
+        </p>
+
+    </section>
+
+
+    <section class="info-grid">
+
+
+        <div class="info-card">
+
+            <span>
+                Name
+            </span>
+
+            <strong>
+                {{ user["name"] if user else "—" }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <span>
+                Designation
+            </span>
+
+            <strong>
+                {{ user["designation"] if user and user["designation"] else "—" }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <span>
+                Department
+            </span>
+
+            <strong>
+                {{ user["branch"] if user and user["branch"] else "—" }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <span>
+                Email
+            </span>
+
+            <strong>
+                {{ user["email"] if user and user["email"] else "—" }}
+            </strong>
+
+        </div>
+
+
+    </section>
+
+
+    <h2 class="section-title">
+        Faculty Services
+    </h2>
+
+
+    <section class="feature-grid">
+
+
+        <a
+            href="{{ url_for('attendance.attendance_page') }}"
+            class="feature attendance"
+        >
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3>
+                Attendance Management
+            </h3>
+
+            <p>
+                Mark attendance for students and view attendance records.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('leave.leave_page') }}"
+            class="feature"
+        >
+
+            <div class="feature-icon">
+                📝
+            </div>
+
+            <h3>
+                Leave Request
+            </h3>
+
+            <p>
+                Apply for leave and track your requests.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('gate_pass.gate_pass_page') }}"
+            class="feature"
+        >
+
+            <div class="feature-icon">
+                🚪
+            </div>
+
+            <h3>
+                Gate Pass
+            </h3>
+
+            <p>
+                Apply for a campus gate pass.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('certificates.certificates_page') }}"
+            class="feature"
+        >
+
+            <div class="feature-icon">
+                📜
+            </div>
+
+            <h3>
+                Certificates
+            </h3>
+
+            <p>
+                Submit certificate requests.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('complaints.complaints_page') }}"
+            class="feature"
+        >
+
+            <div class="feature-icon">
+                ⚠️
+            </div>
+
+            <h3>
+                Complaints
+            </h3>
+
+            <p>
+                Submit and track complaints.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('notices.notices_page') }}"
+            class="feature"
+        >
+
+            <div class="feature-icon">
+                📢
+            </div>
+
+            <h3>
+                Notices
+            </h3>
+
+            <p>
+                View important campus notices.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('notifications.notifications_page') }}"
+            class="feature"
+        >
+
+            <div class="feature-icon">
+                🔔
+            </div>
+
+            <h3>
+                Notifications
+            </h3>
+
+            <p>
+                View your latest notifications.
+            </p>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('events.events_page') }}"
+            class="feature"
+        >
+
+            <div class="feature-icon">
+                🎉
+            </div>
+
+            <h3>
+                Events
+            </h3>
+
+            <p>
+                View upcoming campus events.
+                Faculty cannot register for events.
+            </p>
+
+        </a>
+
+
+    </section>
+
+
+    <div class="notice">
+
+        <strong>
+            ℹ️ Faculty Access:
+        </strong>
+
+        You can manage student attendance as permitted,
+        submit leave, gate-pass, certificate and complaint
+        requests, view notices and notifications, and view
+        campus events.
+
+        <br><br>
+
+        <strong>
+            Event Registration:
+        </strong>
+
+        Faculty can view events but cannot register.
+
+    </div>
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
