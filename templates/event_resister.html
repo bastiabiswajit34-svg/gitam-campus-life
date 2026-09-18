@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Event Registration - GITAM Campus Life</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f8f4;
+            color: #183b2a;
+        }
+
+        .header {
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 22px 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 7px 0 0;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            padding: 25px 15px 90px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: white;
+            color: #087f3f;
+            border: 2px solid #087f3f;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back:hover {
+            background: #e5f8ed;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+        }
+
+        .event-title {
+            text-align: center;
+            color: #087f3f;
+            margin-top: 0;
+            font-size: 25px;
+        }
+
+        .event-summary {
+            background: #eef8f1;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .event-summary p {
+            margin: 7px 0;
+            font-size: 14px;
+        }
+
+        .event-summary strong {
+            color: #087f3f;
+        }
+
+        label {
+            display: block;
+            margin-top: 17px;
+            margin-bottom: 7px;
+            color: #087f3f;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c9ddd0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #087f3f;
+            box-shadow: 0 0 0 2px #dff2e7;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #087f3f;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #066b35;
+        }
+
+        .note {
+            margin-top: 18px;
+            padding: 12px;
+            background: #fff8e6;
+            border-left: 4px solid #d9a400;
+            border-radius: 7px;
+            color: #765c00;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 20px 10px 90px;
+            }
+
+            .card {
+                padding: 20px 15px;
+            }
+
+            .event-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <h1>
+        📝 Event Registration
+    </h1>
+
+    <p>
+        GITAM Campus Life
+    </p>
+
+</header>
+
+
+<main class="container">
+
+
+    <a
+        href="{{ url_for(
+            'events.event_details',
+            event_id=event['id']
+        ) }}"
+        class="back"
+    >
+        ← Back to Event
+    </a>
+
+
+    {% if event %}
+
+
+    <div class="card">
+
+
+        <h2 class="event-title">
+
+            {{ event["title"] }}
+
+        </h2>
+
+
+        <div class="event-summary">
+
+
+            {% if event["event_date"] %}
+
+            <p>
+                <strong>📅 Date:</strong>
+                {{ event["event_date"] }}
+            </p>
+
+            {% endif %}
+
+
+            {% if event["event_time"] %}
+
+            <p>
+                <strong>🕐 Time:</strong>
+                {{ event["event_time"] }}
+            </p>
+
+            {% endif %}
+
+
+            {% if event["venue"] %}
+
+            <p>
+                <strong>📍 Venue:</strong>
+                {{ event["venue"] }}
+            </p>
+
+            {% endif %}
+
+
+            {% if event["max_participants"] %}
+
+            <p>
+                <strong>👥 Maximum Participants:</strong>
+                {{ event["max_participants"] }}
+            </p>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <form method="POST">
+
+
+            <label for="name">
+                Student Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                value="{{ user['name'] if user else '' }}"
+                placeholder="Enter your name"
+                required
+            >
+
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                value="{{ user['email'] if user else '' }}"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label for="phone">
+                Phone Number
+            </label>
+
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value="{{ user['phone'] if user else '' }}"
+                placeholder="Enter your phone number"
+            >
+
+
+            <button
+                type="submit"
+                class="button"
+            >
+                ✅ Confirm Registration
+            </button>
+
+
+        </form>
+
+
+        <div class="note">
+
+            <strong>
+                Important:
+            </strong>
+
+            Event registration is available only to
+            student accounts. Please make sure your
+            details are correct before submitting.
+
+        </div>
+
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="card" style="text-align:center;">
+
+        <div style="font-size:50px;">
+            ❌
+        </div>
+
+        <h2 style="color:#087f3f;">
+            Event Not Found
+        </h2>
+
+        <p>
+            The requested event could not be found.
+        </p>
+
+        <a
+            href="{{ url_for('events.events_page') }}"
+            class="button"
+            style="text-decoration:none;"
+        >
+            View Events
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+<footer class="footer">
+
+    MADE BY TEAM INNOVATORS HUB
+
+</footer>
+
+
+</body>
+
+</html>
