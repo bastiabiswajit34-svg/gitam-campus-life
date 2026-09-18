@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Notice - GITAM Campus Life</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .edit-notice-container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .edit-notice-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e5e5;
+        }
+
+        .edit-notice-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .edit-notice-header h1 {
+            color: #087f3f;
+            margin-bottom: 8px;
+        }
+
+        .edit-notice-header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #087f3f;
+            box-shadow: 0 0 0 2px rgba(8, 127, 63, 0.10);
+        }
+
+        .form-group textarea {
+            min-height: 220px;
+            resize: vertical;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-save {
+            background: #087f3f;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-save:hover {
+            background: #066b35;
+        }
+
+        .btn-cancel {
+            background: #eeeeee;
+            color: #333;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .btn-cancel:hover {
+            background: #dddddd;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: #e8f7ee;
+            color: #087f3f;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% extends "base.html" %}
+
+    {% block content %}
+
+    <div class="edit-notice-container">
+
+        <div class="edit-notice-card">
+
+            <div class="edit-notice-header">
+
+                <span class="admin-badge">
+                    ADMIN NOTICE MANAGEMENT
+                </span>
+
+                <h1>✏️ Edit Notice</h1>
+
+                <p>
+                    Update the notice information and save your changes.
+                </p>
+
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('notices.update', notice_id=notice.id) }}">
+
+                <div class="form-group">
+
+                    <label for="title">
+                        Notice Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="{{ notice.title }}"
+                        required
+                        maxlength="200"
+                        placeholder="Enter notice title"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="content">
+                        Notice Content
+                    </label>
+
+                    <textarea
+                        id="content"
+                        name="content"
+                        required
+                        placeholder="Enter notice content"
+                    >{{ notice.content }}</textarea>
+
+                </div>
+
+                <div class="button-row">
+
+                    <button type="submit" class="btn-save">
+                        💾 Save Changes
+                    </button>
+
+                    <a
+                        href="{{ url_for('notices.admin_notices') }}"
+                        class="btn-cancel">
+                        ← Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% endblock %}
+
+</body>
+</html>
