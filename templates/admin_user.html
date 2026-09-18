@@ -1,0 +1,921 @@
+<!-- ============================================================
+     GITAM CAMPUS LIFE 2.0
+     ADMIN USER MANAGEMENT
+     COMPLETE UPGRADED TEMPLATE
+     ============================================================ -->
+
+{% extends "base.html" %}
+
+{% block title %}Admin User Management - GITAM Campus Life{% endblock %}
+
+{% block content %}
+
+<style>
+    .admin-users-page {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 15px 40px;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #087f3f, #0aa653);
+        color: white;
+        padding: 28px;
+        border-radius: 16px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+    }
+
+    .page-header h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+    }
+
+    .page-header p {
+        margin: 0;
+        opacity: 0.95;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 18px;
+        padding: 10px 18px;
+        background: white;
+        color: #087f3f;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .back-button:hover {
+        background: #eaf8ef;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    }
+
+    .stat-number {
+        font-size: 30px;
+        font-weight: bold;
+        color: #087f3f;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .section {
+        background: white;
+        border-radius: 16px;
+        padding: 22px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        border: 1px solid #e5e5e5;
+        overflow-x: auto;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        border-bottom: 2px solid #eaf5ee;
+        padding-bottom: 12px;
+    }
+
+    .section-title h2 {
+        margin: 0;
+        color: #087f3f;
+        font-size: 21px;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .badge-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-approved {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .badge-role {
+        background: #e8f5ed;
+        color: #087f3f;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+    th {
+        background: #087f3f;
+        color: white;
+        padding: 13px 10px;
+        text-align: left;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 13px 10px;
+        border-bottom: 1px solid #eeeeee;
+        color: #333;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    tr:hover td {
+        background: #f8fcf9;
+    }
+
+    .user-name {
+        font-weight: bold;
+        color: #087f3f;
+    }
+
+    .user-email {
+        color: #666;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    .actions {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+    }
+
+    .action-form {
+        margin: 0;
+    }
+
+    .btn {
+        border: none;
+        border-radius: 7px;
+        padding: 8px 13px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: 0.2s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        opacity: 0.92;
+    }
+
+    .btn-approve {
+        background: #087f3f;
+        color: white;
+    }
+
+    .btn-reject {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-remove {
+        background: #b02a37;
+        color: white;
+    }
+
+    .btn-delete {
+        background: #6c757d;
+        color: white;
+    }
+
+    .empty-box {
+        text-align: center;
+        padding: 30px 15px;
+        color: #777;
+        background: #fafafa;
+        border-radius: 10px;
+        border: 1px dashed #ccc;
+    }
+
+    .empty-icon {
+        font-size: 35px;
+        margin-bottom: 8px;
+    }
+
+    .warning-box {
+        background: #fff8e1;
+        border-left: 5px solid #ffc107;
+        padding: 14px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        color: #6b5600;
+        font-size: 14px;
+    }
+
+    .danger-box {
+        background: #fff0f1;
+        border-left: 5px solid #dc3545;
+        padding: 14px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        color: #721c24;
+        font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+        .admin-users-page {
+            margin: 15px auto;
+            padding: 0 10px 30px;
+        }
+
+        .page-header {
+            padding: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 23px;
+        }
+
+        .section {
+            padding: 15px;
+        }
+
+        .section-title {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="admin-users-page">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h1>👥 User Management</h1>
+        <p>Manage student and faculty registrations, approvals and user accounts.</p>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="back-button">
+            ← Back to Admin Dashboard
+        </a>
+    </div>
+
+
+    <!-- STATISTICS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-number">
+                {{ pending_students|length }}
+            </div>
+            <div class="stat-label">
+                Pending Students
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">
+                {{ pending_faculty|length }}
+            </div>
+            <div class="stat-label">
+                Pending Faculty
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">
+                {{ approved_users|length }}
+            </div>
+            <div class="stat-label">
+                Approved Users
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">
+                {{ rejected_users|length }}
+            </div>
+            <div class="stat-label">
+                Rejected Users
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         PENDING STUDENTS
+         ======================================================== -->
+
+    <div class="section">
+
+        <div class="section-title">
+            <h2>🎓 Pending Student Registrations</h2>
+
+            <span class="badge badge-pending">
+                {{ pending_students|length }} Pending
+            </span>
+        </div>
+
+        {% if pending_students %}
+
+        <div class="warning-box">
+            ⚠️ These students cannot log in until an administrator approves their registration.
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Username</th>
+                        <th>Roll No.</th>
+                        <th>Branch</th>
+                        <th>Year</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for user in pending_students %}
+
+                    <tr>
+
+                        <td>
+                            {{ user.id }}
+                        </td>
+
+                        <td>
+                            <div class="user-name">
+                                {{ user.name }}
+                            </div>
+
+                            {% if user.email %}
+                            <div class="user-email">
+                                {{ user.email }}
+                            </div>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ user.username }}
+                        </td>
+
+                        <td>
+                            {{ user.roll_no or '-' }}
+                        </td>
+
+                        <td>
+                            {{ user.branch or '-' }}
+                        </td>
+
+                        <td>
+                            {{ user.year or '-' }}
+                        </td>
+
+                        <td>
+                            {{ user.phone or '-' }}
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <!-- APPROVE -->
+                                <form method="POST"
+                                      action="{{ url_for('admin_users.approve_user', user_id=user.id) }}"
+                                      class="action-form"
+                                      onsubmit="return confirm('Approve this student registration?');">
+
+                                    <button type="submit"
+                                            class="btn btn-approve">
+                                        ✓ Approve
+                                    </button>
+
+                                </form>
+
+
+                                <!-- REJECT -->
+                                <form method="POST"
+                                      action="{{ url_for('admin_users.reject_user', user_id=user.id) }}"
+                                      class="action-form"
+                                      onsubmit="return confirm('Reject this student registration?');">
+
+                                    <button type="submit"
+                                            class="btn btn-reject">
+                                        ✕ Reject
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            <div class="empty-icon">🎓</div>
+
+            <strong>No pending student registrations</strong>
+
+            <p>New student registrations will appear here.</p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- ========================================================
+         PENDING FACULTY
+         ======================================================== -->
+
+    <div class="section">
+
+        <div class="section-title">
+
+            <h2>👨‍🏫 Pending Faculty Registrations</h2>
+
+            <span class="badge badge-pending">
+                {{ pending_faculty|length }} Pending
+            </span>
+
+        </div>
+
+
+        {% if pending_faculty %}
+
+        <div class="warning-box">
+            ⚠️ These faculty accounts require administrator approval before login.
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Faculty</th>
+                        <th>Username</th>
+                        <th>Designation</th>
+                        <th>Branch</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for user in pending_faculty %}
+
+                    <tr>
+
+                        <td>
+                            {{ user.id }}
+                        </td>
+
+                        <td>
+
+                            <div class="user-name">
+                                {{ user.name }}
+                            </div>
+
+                            {% if user.email %}
+
+                            <div class="user-email">
+                                {{ user.email }}
+                            </div>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ user.username }}
+                        </td>
+
+                        <td>
+                            {{ user.designation or '-' }}
+                        </td>
+
+                        <td>
+                            {{ user.branch or '-' }}
+                        </td>
+
+                        <td>
+                            {{ user.phone or '-' }}
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <!-- APPROVE -->
+                                <form method="POST"
+                                      action="{{ url_for('admin_users.approve_user', user_id=user.id) }}"
+                                      class="action-form"
+                                      onsubmit="return confirm('Approve this faculty registration?');">
+
+                                    <button type="submit"
+                                            class="btn btn-approve">
+                                        ✓ Approve
+                                    </button>
+
+                                </form>
+
+
+                                <!-- REJECT -->
+                                <form method="POST"
+                                      action="{{ url_for('admin_users.reject_user', user_id=user.id) }}"
+                                      class="action-form"
+                                      onsubmit="return confirm('Reject this faculty registration?');">
+
+                                    <button type="submit"
+                                            class="btn btn-reject">
+                                        ✕ Reject
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            <div class="empty-icon">👨‍🏫</div>
+
+            <strong>No pending faculty registrations</strong>
+
+            <p>New faculty registrations will appear here.</p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- ========================================================
+         APPROVED USERS
+         ======================================================== -->
+
+    <div class="section">
+
+        <div class="section-title">
+
+            <h2>✅ Approved Users</h2>
+
+            <span class="badge badge-approved">
+                {{ approved_users|length }} Active
+            </span>
+
+        </div>
+
+
+        {% if approved_users %}
+
+        <div class="danger-box">
+            ⚠️ Removing a user permanently deletes their account.
+            The user will no longer be able to log in.
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for user in approved_users %}
+
+                    <tr>
+
+                        <td>
+                            {{ user.id }}
+                        </td>
+
+
+                        <td>
+
+                            <div class="user-name">
+                                {{ user.name }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ user.username }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge badge-role">
+                                {{ user.role|capitalize }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            {{ user.email or '-' }}
+                        </td>
+
+
+                        <td>
+                            {{ user.phone or '-' }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge badge-approved">
+                                {{ user.status or 'Active' }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if user.role != 'admin' %}
+
+                            <form method="POST"
+                                  action="{{ url_for('admin_users.remove_user', user_id=user.id) }}"
+                                  class="action-form"
+                                  onsubmit="return confirm('Are you sure you want to permanently remove {{ user.name }}? This user will no longer be able to log in.');">
+
+                                <button type="submit"
+                                        class="btn btn-remove">
+                                    🗑 Remove
+                                </button>
+
+                            </form>
+
+                            {% else %}
+
+                            <span class="badge badge-role">
+                                🔒 Protected
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            <div class="empty-icon">👥</div>
+
+            <strong>No approved users found</strong>
+
+            <p>Approved student and faculty accounts will appear here.</p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- ========================================================
+         REJECTED USERS
+         ======================================================== -->
+
+    <div class="section">
+
+        <div class="section-title">
+
+            <h2>❌ Rejected Registrations</h2>
+
+            <span class="badge badge-rejected">
+                {{ rejected_users|length }} Rejected
+            </span>
+
+        </div>
+
+
+        {% if rejected_users %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for user in rejected_users %}
+
+                    <tr>
+
+                        <td>
+                            {{ user.id }}
+                        </td>
+
+
+                        <td>
+
+                            <div class="user-name">
+                                {{ user.name }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ user.username }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge badge-role">
+                                {{ user.role|capitalize }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            {{ user.email or '-' }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge badge-rejected">
+                                Rejected
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if user.role != 'admin' %}
+
+                            <form method="POST"
+                                  action="{{ url_for('admin_users.delete_user', user_id=user.id) }}"
+                                  class="action-form"
+                                  onsubmit="return confirm('Permanently delete this rejected registration?');">
+
+                                <button type="submit"
+                                        class="btn btn-delete">
+                                    🗑 Delete
+                                </button>
+
+                            </form>
+
+                            {% else %}
+
+                            <span class="badge badge-role">
+                                🔒 Protected
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            <div class="empty-icon">📭</div>
+
+            <strong>No rejected registrations</strong>
+
+            <p>Rejected student and faculty registrations will appear here.</p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}
