@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+        GITAM Campus Life
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        /* =====================================================
+           GITAM CAMPUS LIFE - BASE DESIGN
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5fbf7;
+            color: #173b2a;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* =====================================================
+           NAVBAR
+           ===================================================== */
+
+        .main-navbar {
+            width: 100%;
+            background: #087f3f;
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 23px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .navbar-brand small {
+            display: block;
+            font-size: 11px;
+            font-weight: normal;
+            margin-top: 3px;
+            opacity: 0.9;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .navbar-links a {
+            color: white;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s ease;
+        }
+
+        .navbar-links a:hover {
+            background: white;
+            color: #087f3f;
+        }
+
+        .nav-visitor {
+            background: white !important;
+            color: #087f3f !important;
+            border: 2px solid white;
+        }
+
+        .nav-visitor:hover {
+            background: #e9f8ef !important;
+            color: #066b35 !important;
+        }
+
+        .nav-faculty {
+            border: 1px solid rgba(255,255,255,0.65);
+        }
+
+        /* =====================================================
+           FLASH MESSAGES
+           ===================================================== */
+
+        .flash-container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 18px auto 0;
+        }
+
+        .flash-message {
+            background: white;
+            border-left: 5px solid #087f3f;
+            padding: 13px 16px;
+            margin-bottom: 10px;
+            border-radius: 7px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            color: #254b35;
+            font-size: 14px;
+        }
+
+        .flash-message.success {
+            border-left-color: #087f3f;
+        }
+
+        .flash-message.error {
+            border-left-color: #c62828;
+        }
+
+        .flash-message.warning {
+            border-left-color: #d98b00;
+        }
+
+        /* =====================================================
+           PAGE CONTENT
+           ===================================================== */
+
+        .page-content {
+            min-height: calc(100vh - 150px);
+        }
+
+        /* =====================================================
+           HOME PAGE
+           ===================================================== */
+
+        .home-wrapper {
+            width: 92%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 45px 0;
+        }
+
+        .hero-section {
+            background: white;
+            border-radius: 18px;
+            padding: 55px 35px;
+            text-align: center;
+            border-top: 6px solid #087f3f;
+            box-shadow: 0 5px 22px rgba(0,0,0,0.07);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: #e7f7ed;
+            color: #087f3f;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .hero-section h1 {
+            margin: 0;
+            color: #087f3f;
+            font-size: 42px;
+        }
+
+        .hero-section h2 {
+            margin: 10px 0;
+            color: #173b2a;
+            font-size: 22px;
+            font-weight: normal;
+        }
+
+        .hero-section p {
+            max-width: 760px;
+            margin: 18px auto;
+            color: #607568;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* =====================================================
+           HOME BUTTONS
+           ===================================================== */
+
+        .home-actions {
+            margin-top: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s ease;
+            border: 2px solid #087f3f;
+        }
+
+        .home-login {
+            background: #087f3f;
+            color: white !important;
+        }
+
+        .home-login:hover {
+            background: #066b35;
+            transform: translateY(-2px);
+        }
+
+        .home-register {
+            background: white;
+            color: #087f3f !important;
+        }
+
+        .home-register:hover {
+            background: #e7f7ed;
+            transform: translateY(-2px);
+        }
+
+        .home-faculty {
+            background: #eef9f2;
+            color: #087f3f !important;
+        }
+
+        .home-faculty:hover {
+            background: #d9f1e2;
+            transform: translateY(-2px);
+        }
+
+        .home-visitor {
+            background: #173b2a;
+            color: white !important;
+            border-color: #173b2a;
+        }
+
+        .home-visitor:hover {
+            background: #0f2b1d;
+            transform: translateY(-2px);
+        }
+
+        /* =====================================================
+           SERVICES
+           ===================================================== */
+
+        .services-section {
+            margin-top: 40px;
+        }
+
+        .section-heading {
+            text-align: center;
+            color: #087f3f;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .section-description {
+            text-align: center;
+            color: #607568;
+            max-width: 700px;
+            margin: -8px auto 25px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 22px 18px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #dceee3;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.05);
+            transition: 0.2s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            border-color: #087f3f;
+        }
+
+        .service-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .service-card h3 {
+            margin: 0 0 7px;
+            color: #087f3f;
+            font-size: 16px;
+        }
+
+        .service-card p {
+            margin: 0;
+            color: #6a7d71;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           VISITOR INFORMATION
+           ===================================================== */
+
+        .visitor-info {
+            margin-top: 40px;
+            background: #087f3f;
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .visitor-info h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+
+        .visitor-info p {
+            max-width: 750px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .visitor-info-button {
+            display: inline-block;
+            background: white;
+            color: #087f3f !important;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .visitor-info-button:hover {
+            background: #e7f7ed;
+        }
+
+        /* =====================================================
+           DASHBOARD COMMON
+           ===================================================== */
+
+        .dashboard-container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        .main-footer {
+            background: #087f3f;
+            color: white;
+            text-align: center;
+            padding: 18px 10px;
+            margin-top: 35px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .main-footer p {
+            margin: 0;
+        }
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .main-navbar {
+                padding: 14px 4%;
+            }
+
+            .navbar-brand {
+                width: 100%;
+                text-align: center;
+            }
+
+            .navbar-links {
+                width: 100%;
+            }
+
+            .navbar-links a {
+                font-size: 12px;
+                padding: 8px 9px;
+            }
+
+            .home-wrapper {
+                width: 94%;
+                padding: 25px 0;
+            }
+
+            .hero-section {
+                padding: 35px 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 30px;
+            }
+
+            .hero-section h2 {
+                font-size: 18px;
+            }
+
+            .home-actions {
+                flex-direction: column;
+            }
+
+            .home-button {
+                width: 100%;
+                max-width: 320px;
+                text-align: center;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .visitor-info {
+                padding: 25px 18px;
+            }
+        }
+
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+<!-- =========================================================
+     NAVIGATION BAR
+     ========================================================= -->
+
+<header class="main-navbar">
+
+    <a href="{{ url_for('home') }}"
+       class="navbar-brand">
+
+        GITAM Campus Life
+
+        <small>
+            Smart Campus • Version 2.0
+        </small>
+
+    </a>
+
+
+    <nav class="navbar-links">
+
+        {% if session.get("user_id") %}
+
+            {% if session.get("role") == "student" %}
+
+                <a href="{{ url_for('student_dashboard') }}">
+                    Dashboard
+                </a>
+
+            {% elif session.get("role") == "faculty" %}
+
+                <a href="{{ url_for('faculty_dashboard') }}">
+                    Dashboard
+                </a>
+
+            {% elif session.get("role") == "admin" %}
+
+                <a href="{{ url_for('admin_dashboard') }}">
+                    Dashboard
+                </a>
+
+            {% endif %}
+
+
+            <a href="{{ url_for('visitor.visitor_apply') }}"
+               class="nav-visitor">
+
+                👤 Visitor Pass
+
+            </a>
+
+
+            <a href="{{ url_for('auth.logout') }}">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="{{ url_for('auth.login') }}">
+                Login
+            </a>
+
+            <a href="{{ url_for('auth.register') }}">
+                Student Registration
+            </a>
+
+            <a href="{{ url_for('auth.faculty_register') }}"
+               class="nav-faculty">
+
+                Faculty Registration
+
+            </a>
+
+            <a href="{{ url_for('visitor.visitor_apply') }}"
+               class="nav-visitor">
+
+                👤 Visitor Pass
+
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+</header>
+
+
+<!-- =========================================================
+     FLASH MESSAGES
+     ========================================================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div class="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+<!-- =========================================================
+     PAGE CONTENT
+     ========================================================= -->
+
+<div class="page-content">
+
+    {% block content %}
+
+
+        <!-- =================================================
+             HOME PAGE
+             ================================================= -->
+
+        <div class="home-wrapper">
+
+            <section class="hero-section">
+
+                <div class="hero-badge">
+                    🎓 SMART CAMPUS PLATFORM
+                </div>
+
+                <h1>
+                    GITAM Campus Life
+                </h1>
+
+                <h2>
+                    A Smarter & Connected Campus Experience
+                </h2>
+
+                <p>
+                    Manage student services, faculty services,
+                    attendance, leave requests, gate passes,
+                    certificates, complaints, notices,
+                    notifications, digital ID, visitor passes
+                    and campus events from one platform.
+                </p>
+
+
+                <!-- =========================================
+                     MAIN ACTION BUTTONS
+                     ========================================= -->
+
+                <div class="home-actions">
+
+                    <a href="{{ url_for('auth.login') }}"
+                       class="home-button home-login">
+
+                        🔐 Login
+
+                    </a>
+
+
+                    <a href="{{ url_for('auth.register') }}"
+                       class="home-button home-register">
+
+                        🎓 Student Registration
+
+                    </a>
+
+
+                    <a href="{{ url_for('auth.faculty_register') }}"
+                       class="home-button home-faculty">
+
+                        👨‍🏫 Faculty Registration
+
+                    </a>
+
+
+                    <a href="{{ url_for('visitor.visitor_apply') }}"
+                       class="home-button home-visitor">
+
+                        👤 Visitor Pass
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 CAMPUS SERVICES
+                 ============================================= -->
+
+            <section class="services-section">
+
+                <h2 class="section-heading">
+                    Campus Services
+                </h2>
+
+                <p class="section-description">
+                    One platform for essential campus activities
+                    and digital services.
+                </p>
+
+
+                <div class="services-grid">
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            📊
+                        </div>
+
+                        <h3>
+                            Attendance
+                        </h3>
+
+                        <p>
+                            Track and manage attendance records.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            📝
+                        </div>
+
+                        <h3>
+                            Leave Request
+                        </h3>
+
+                        <p>
+                            Submit and track leave applications.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            🚪
+                        </div>
+
+                        <h3>
+                            Gate Pass
+                        </h3>
+
+                        <p>
+                            Apply for and manage gate passes.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            📜
+                        </div>
+
+                        <h3>
+                            Certificates
+                        </h3>
+
+                        <p>
+                            Request academic certificates digitally.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            ⚠️
+                        </div>
+
+                        <h3>
+                            Complaints
+                        </h3>
+
+                        <p>
+                            Submit and monitor campus complaints.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            📢
+                        </div>
+
+                        <h3>
+                            Notices
+                        </h3>
+
+                        <p>
+                            Access important campus announcements.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            🔔
+                        </div>
+
+                        <h3>
+                            Notifications
+                        </h3>
+
+                        <p>
+                            Receive important campus updates.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            🪪
+                        </div>
+
+                        <h3>
+                            Digital ID
+                        </h3>
+
+                        <p>
+                            Access your digital campus identity.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            👤
+                        </div>
+
+                        <h3>
+                            Visitor Pass
+                        </h3>
+
+                        <p>
+                            Visitors can apply for a campus visit
+                            without creating an account.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            📅
+                        </div>
+
+                        <h3>
+                            Events
+                        </h3>
+
+                        <p>
+                            Discover campus events and activities.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            🎟️
+                        </div>
+
+                        <h3>
+                            Event Registration
+                        </h3>
+
+                        <p>
+                            Register for available campus events.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="service-icon">
+                            👥
+                        </div>
+
+                        <h3>
+                            User Management
+                        </h3>
+
+                        <p>
+                            Administrators can manage student and
+                            faculty accounts.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 VISITOR SECTION
+                 ============================================= -->
+
+            <section class="visitor-info">
+
+                <h2>
+                    Visiting GITAM Campus?
+                </h2>
+
+                <p>
+                    Visitors coming to the campus for official,
+                    academic or other work can apply for a
+                    Visitor Pass before arriving.
+                </p>
+
+                <a href="{{ url_for('visitor.visitor_apply') }}"
+                   class="visitor-info-button">
+
+                    Apply for Visitor Pass
+
+                </a>
+
+            </section>
+
+        </div>
+
+    {% endblock %}
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer class="main-footer">
+
+    <p>
+        MADE BY TEAM INNOVATORS HUB
+    </p>
+
+</footer>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+<script>
+
+    /* Auto-hide flash messages */
+
+    setTimeout(function () {
+
+        const messages =
+            document.querySelectorAll(".flash-message");
+
+        messages.forEach(function (message) {
+
+            message.style.transition =
+                "opacity 0.5s ease";
+
+            message.style.opacity = "0";
+
+            setTimeout(function () {
+                message.remove();
+            }, 500);
+
+        });
+
+    }, 5000);
+
+
+    /* Prevent accidental double form submission */
+
+    document.querySelectorAll("form").forEach(function(form) {
+
+        form.addEventListener("submit", function() {
+
+            const submitButtons =
+                form.querySelectorAll(
+                    'button[type="submit"], input[type="submit"]'
+                );
+
+            submitButtons.forEach(function(button) {
+
+                setTimeout(function() {
+
+                    button.disabled = true;
+
+                }, 50);
+
+            });
+
+        });
+
+    });
+
+</script>
+
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>
