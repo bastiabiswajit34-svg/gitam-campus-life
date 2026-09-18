@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}Visitor Pass | GITAM Campus Life{% endblock %}
+
+{% block content %}
+
+<style>
+    .visitor-page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px 15px 60px;
+    }
+
+    .visitor-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .visitor-header h1 {
+        color: #087f3e;
+        font-size: 30px;
+        margin: 0 0 8px;
+        font-weight: 800;
+    }
+
+    .visitor-header p {
+        color: #666;
+        margin: 0;
+    }
+
+    .visitor-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 30px;
+        border: 1px solid #d8eee0;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .info-box {
+        background: #f1f9f4;
+        border-left: 5px solid #087f3e;
+        padding: 16px;
+        border-radius: 9px;
+        margin-bottom: 25px;
+        color: #444;
+        line-height: 1.6;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-group {
+        margin-bottom: 5px;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 7px;
+    }
+
+    .required {
+        color: #d32f2f;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #cfe4d6;
+        border-radius: 8px;
+        background: white;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .form-control:focus {
+        border-color: #087f3e;
+        box-shadow: 0 0 0 3px rgba(8,127,62,0.10);
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .submit-btn {
+        border: none;
+        background: #087f3e;
+        color: white;
+        padding: 13px 25px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background: #056b34;
+    }
+
+    .status-btn {
+        text-decoration: none;
+        background: #eef7f1;
+        color: #087f3e;
+        padding: 13px 25px;
+        border-radius: 8px;
+        font-weight: 700;
+    }
+
+    .status-btn:hover {
+        background: #dcefe3;
+    }
+
+    .security-box {
+        margin-top: 25px;
+        padding: 15px;
+        background: #fff8e1;
+        border: 1px solid #f0df9a;
+        border-radius: 9px;
+        color: #665500;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding: 15px;
+        color: #087f3e;
+        font-weight: 800;
+        font-size: 14px;
+    }
+
+    @media (max-width: 650px) {
+        .visitor-card {
+            padding: 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+
+        .button-row {
+            flex-direction: column;
+        }
+
+        .submit-btn,
+        .status-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="visitor-page">
+
+    <div class="visitor-header">
+        <h1>🎫 Visitor Pass</h1>
+        <p>Apply for a visitor pass for GITAM Campus</p>
+    </div>
+
+    <div class="visitor-card">
+
+        <div class="info-box">
+            <strong>Visitor Pass Information</strong><br>
+            Please enter the visitor's details correctly. The request
+            will be submitted for verification and approval.
+        </div>
+
+        <form
+            method="POST"
+            action="{{ url_for('visitor.visitor_apply') }}"
+        >
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="visitor_name">
+                        Visitor Name <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="visitor_name"
+                        name="visitor_name"
+                        class="form-control"
+                        placeholder="Enter visitor name"
+                        value="{{ request.form.get('visitor_name', '') }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        Phone Number <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        class="form-control"
+                        placeholder="Enter phone number"
+                        value="{{ request.form.get('phone', '') }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter email address"
+                        value="{{ request.form.get('email', '') }}"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="visit_date">
+                        Visit Date <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="date"
+                        id="visit_date"
+                        name="visit_date"
+                        class="form-control"
+                        value="{{ request.form.get('visit_date', '') }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="visit_time">
+                        Visit Time
+                    </label>
+
+                    <input
+                        type="time"
+                        id="visit_time"
+                        name="visit_time"
+                        class="form-control"
+                        value="{{ request.form.get('visit_time', '') }}"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="purpose">
+                        Purpose of Visit <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="purpose"
+                        name="purpose"
+                        class="form-control"
+                        placeholder="Reason for visiting campus"
+                        value="{{ request.form.get('purpose', '') }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="student_id">
+                        Student ID / Roll Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="student_id"
+                        name="student_id"
+                        class="form-control"
+                        placeholder="Enter student ID or roll number"
+                        value="{{ request.form.get('student_id', '') }}"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="student_name">
+                        Visiting Student Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="student_name"
+                        name="student_name"
+                        class="form-control"
+                        placeholder="Enter student name"
+                        value="{{ request.form.get('student_name', '') }}"
+                    >
+                </div>
+
+                <div class="form-group full">
+                    <label for="address">
+                        Visitor Address
+                    </label>
+
+                    <textarea
+                        id="address"
+                        name="address"
+                        class="form-control"
+                        placeholder="Enter visitor address"
+                    >{{ request.form.get('address', '') }}</textarea>
+                </div>
+
+                <div class="form-group full">
+                    <label for="notes">
+                        Additional Information
+                    </label>
+
+                    <textarea
+                        id="notes"
+                        name="notes"
+                        class="form-control"
+                        placeholder="Any additional information..."
+                    >{{ request.form.get('notes', '') }}</textarea>
+                </div>
+
+            </div>
+
+            <div class="security-box">
+                <strong>🔐 Security Notice</strong><br>
+                Visitor requests are subject to campus verification.
+                Please provide accurate information. Approved visitor
+                passes may contain a QR code for verification.
+            </div>
+
+            <div class="button-row">
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+                    🎫 Submit Visitor Pass Request
+                </button>
+
+                <a
+                    href="{{ url_for('visitor.visitor_status') }}"
+                    class="status-btn"
+                >
+                    🔎 Check Pass Status
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="footer">
+        MADE BY TEAM INNOVATORS HUB
+    </div>
+
+</div>
+
+{% endblock %}
