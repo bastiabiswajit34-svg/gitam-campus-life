@@ -1,0 +1,498 @@
+{% extends "base.html" %}
+
+{% block title %}Digital ID | GITAM Campus Life{% endblock %}
+
+{% block content %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .digital-id-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 25px 15px 50px;
+    }
+
+    .digital-id-title {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .digital-id-title h1 {
+        margin: 0;
+        color: #087f3e;
+        font-size: 32px;
+        font-weight: 800;
+    }
+
+    .digital-id-title p {
+        margin-top: 8px;
+        color: #666;
+    }
+
+    .digital-id-actions {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .print-btn {
+        border: none;
+        background: #087f3e;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .print-btn:hover {
+        background: #056b34;
+    }
+
+    .digital-id-card {
+        max-width: 720px;
+        margin: auto;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid #087f3e;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    .id-header {
+        background: linear-gradient(135deg, #087f3e, #11a957);
+        color: white;
+        padding: 22px;
+        text-align: center;
+    }
+
+    .id-header h2 {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .id-header p {
+        margin: 6px 0 0;
+        font-size: 14px;
+        opacity: 0.95;
+    }
+
+    .id-body {
+        padding: 28px;
+    }
+
+    .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        margin-bottom: 28px;
+    }
+
+    .profile-photo {
+        width: 125px;
+        height: 145px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 3px solid #087f3e;
+        background: #f1f8f4;
+        flex-shrink: 0;
+    }
+
+    .profile-placeholder {
+        width: 125px;
+        height: 145px;
+        border-radius: 12px;
+        border: 3px solid #087f3e;
+        background: #eaf7ef;
+        color: #087f3e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 55px;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .profile-name {
+        color: #087f3e;
+        font-size: 25px;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .profile-role {
+        display: inline-block;
+        background: #e8f7ee;
+        color: #087f3e;
+        padding: 6px 13px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 20px;
+    }
+
+    .detail-box {
+        background: #f7fbf8;
+        border: 1px solid #d8eee0;
+        border-radius: 10px;
+        padding: 13px;
+    }
+
+    .detail-label {
+        font-size: 11px;
+        color: #777;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        color: #222;
+        font-size: 15px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .qr-section {
+        margin-top: 28px;
+        padding-top: 25px;
+        border-top: 1px solid #e2e2e2;
+        text-align: center;
+    }
+
+    .qr-section h3 {
+        color: #087f3e;
+        margin-bottom: 15px;
+    }
+
+    .qr-image {
+        width: 190px;
+        height: 190px;
+        object-fit: contain;
+        border: 8px solid white;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+    }
+
+    .qr-placeholder {
+        width: 190px;
+        height: 190px;
+        margin: auto;
+        border: 2px dashed #087f3e;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #087f3e;
+        font-weight: 600;
+    }
+
+    .digital-number {
+        margin-top: 15px;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .digital-number strong {
+        color: #087f3e;
+    }
+
+    .id-footer {
+        background: #f1f8f4;
+        border-top: 1px solid #d8eee0;
+        padding: 16px;
+        text-align: center;
+    }
+
+    .id-footer strong {
+        color: #087f3e;
+        font-size: 14px;
+    }
+
+    .information-card {
+        max-width: 720px;
+        margin: 25px auto 0;
+        background: white;
+        border-radius: 14px;
+        padding: 22px;
+        border: 1px solid #d8eee0;
+        box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+    }
+
+    .information-card h3 {
+        margin-top: 0;
+        color: #087f3e;
+    }
+
+    .information-card p {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 0;
+    }
+
+    .page-footer {
+        text-align: center;
+        margin-top: 35px;
+        padding: 15px;
+        color: #087f3e;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    @media (max-width: 650px) {
+        .digital-id-title h1 {
+            font-size: 26px;
+        }
+
+        .profile-section {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .id-body {
+            padding: 20px;
+        }
+
+        .digital-id-card {
+            width: 100%;
+        }
+    }
+
+    @media print {
+        body {
+            background: white !important;
+        }
+
+        .digital-id-title,
+        .digital-id-actions,
+        .information-card,
+        .page-footer {
+            display: none !important;
+        }
+
+        .digital-id-page {
+            padding: 0;
+        }
+
+        .digital-id-card {
+            width: 100%;
+            max-width: 720px;
+            margin: auto;
+            box-shadow: none;
+            border: 2px solid #087f3e;
+        }
+
+        .id-header {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .id-footer {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>
+
+<div class="digital-id-page">
+
+    <div class="digital-id-title">
+        <h1>🪪 Digital ID</h1>
+        <p>GITAM Campus Life Digital Identity Card</p>
+    </div>
+
+    <div class="digital-id-actions">
+        <button class="print-btn" onclick="window.print()">
+            🖨️ Print Digital ID
+        </button>
+    </div>
+
+    <div class="digital-id-card">
+
+        <div class="id-header">
+            <h2>GITAM CAMPUS LIFE</h2>
+            <p>Digital Identity Card</p>
+        </div>
+
+        <div class="id-body">
+
+            <div class="profile-section">
+
+                {% set user_name = user["name"]|default("GITAM User", true) %}
+                {% set user_initial = user_name[0] if user_name else "G" %}
+
+                {% if user["profile_image"]|default("", true) %}
+
+                    <img
+                        src="{{ user['profile_image'] }}"
+                        alt="Profile Photo"
+                        class="profile-photo"
+                        onerror="this.style.display='none'; document.getElementById('profileFallback').style.display='flex';"
+                    >
+
+                    <div
+                        id="profileFallback"
+                        class="profile-placeholder"
+                        style="display:none;"
+                    >
+                        {{ user_initial|upper }}
+                    </div>
+
+                {% else %}
+
+                    <div class="profile-placeholder">
+                        {{ user_initial|upper }}
+                    </div>
+
+                {% endif %}
+
+                <div>
+
+                    <div class="profile-name">
+                        {{ user_name }}
+                    </div>
+
+                    <span class="profile-role">
+                        {{ user["role"]|default("Student", true) }}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="details-grid">
+
+                <div class="detail-box">
+                    <div class="detail-label">Digital ID</div>
+                    <div class="detail-value">
+                        {% if digital_id %}
+                            {{ digital_id["id"]|default("Not Generated", true) }}
+                        {% else %}
+                            Not Generated
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <div class="detail-label">Username</div>
+                    <div class="detail-value">
+                        {{ user["username"]|default("Not Available", true) }}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <div class="detail-label">Roll Number</div>
+                    <div class="detail-value">
+                        {{ user["roll_no"]|default("N/A", true) }}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <div class="detail-label">Branch / Department</div>
+                    <div class="detail-value">
+                        {{ user["branch"]|default("N/A", true) }}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <div class="detail-label">Year</div>
+                    <div class="detail-value">
+                        {{ user["year"]|default("N/A", true) }}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value">
+                        {{ user["email"]|default("N/A", true) }}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value">
+                        {{ user["phone"]|default("N/A", true) }}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">
+                        {{ user["status"]|default("Active", true) }}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="qr-section">
+
+                <h3>Scan Digital ID</h3>
+
+                {% if digital_id and digital_id["qr_code"]|default("", true) %}
+
+                    <img
+                        src="{{ digital_id['qr_code'] }}"
+                        alt="Digital ID QR Code"
+                        class="qr-image"
+                    >
+
+                {% else %}
+
+                    <div class="qr-placeholder">
+                        QR Code Not Available
+                    </div>
+
+                {% endif %}
+
+                {% if digital_id %}
+                    <div class="digital-number">
+                        Digital ID Number:
+                        <strong>
+                            {{ digital_id["id"]|default("N/A", true) }}
+                        </strong>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="id-footer">
+            <strong>MADE BY TEAM INNOVATORS HUB</strong>
+        </div>
+
+    </div>
+
+    <div class="information-card">
+
+        <h3>About Digital ID</h3>
+
+        <p>
+            This Digital ID is used to identify authorized members of
+            GITAM Campus Life. The QR code can be scanned for digital
+            verification where supported.
+        </p>
+
+    </div>
+
+    <div class="page-footer">
+        MADE BY TEAM INNOVATORS HUB
+    </div>
+
+</div>
+
+{% endblock %}
